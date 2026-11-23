@@ -393,7 +393,7 @@ footer{padding-block:20px 40px}
 </div></div>
 
 <section id="next" style="padding-top:36px"><div class="wrap">
-  <div class="head"><div class="eyebrow">Next event</div><h2>Do not miss it</h2></div>
+  <div class="head"><div class="eyebrow">Upcoming</div><h2>Do not miss it</h2></div>
   <div class="next glass" id="nextCard"></div>
   <p class="note">Sample event. Add the real event poster and details.</p>
 </div></section>
@@ -785,7 +785,7 @@ $("#evGrid").innerHTML=upcoming.length?upcoming.map(function(a,i){
   var when=days===0?"Today":days===1?"Tomorrow":"In "+days+" days";
   var inner=a.src?'<img src="'+a.src+'" alt="Poster for '+a.t+'">':'<span class="ph" style="background:'+tileBg(a.s)+'">'+ico(a.s)+'<span>Event poster</span></span>';
   el.innerHTML='<button type="button" class="poster" id="posterBtn" aria-label="Open the poster for '+a.t+'">'+inner+'</button>'+
-   '<div class="nxinfo"><span class="live">Next event</span><h3>'+a.t+'</h3>'+
+   '<div class="nxinfo"><span class="live">Upcoming</span><h3>'+a.t+'</h3>'+
    '<div class="nxfacts"><span>'+f.full+'</span><span class="gold">'+when+'</span><span>'+a.s+'</span></div>'+
    '<p>'+a.p+'</p>'+
    '<div class="row"><a class="btn red" href="#join-tfsc">Join TFSC</a><a class="btn" href="#events">All events</a></div></div>';
