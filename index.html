@@ -1,0 +1,945 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Track Force Sports Club (TFSC), a football club and a node of the Students Islamic Organisation.">
+<link rel="icon" href="tfsc-logo.png">
+<title>Track Force Sports Club</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Manrope:wght@400;500;600;700;800&display=swap">
+<style>
+/* Layout concept: a night-time stadium. Frosted liquid-glass panels float over slow red and gold light, taken from the TFSC shield. Single dark look by choice. */
+:root{
+  color-scheme:dark;
+  --ink:#07080C; --ink-2:#0E1017; --text:#F6F3EC; --muted:rgba(246,243,236,.72);
+  --red:#E5202E; --red-hot:#FF4553; --gold:#FFC62E; --violet:#8B5CF6; --teal:#22C7B8;
+  --edge:rgba(255,255,255,.18);
+  --font-display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
+  --font-body:"Manrope",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--ink);color:var(--text);font-family:var(--font-body);font-size:16px;line-height:1.6;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:70;background:var(--ink)}
+h1,h2,h3,h4{font-family:var(--font-display);margin:0;line-height:1;text-transform:uppercase;text-wrap:balance;font-weight:800;letter-spacing:.01em}
+h2{font-size:clamp(2.4rem,6vw,4rem)} h3{font-size:1.7rem} h4{font-size:1.25rem}
+p{margin:0;max-width:62ch}
+a{color:var(--gold)}
+:focus-visible{outline:3px solid var(--gold);outline-offset:3px;border-radius:8px}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+section{padding-block:84px;scroll-margin-top:90px}
+.eyebrow{font-weight:800;font-size:.76rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
+.lead{font-size:1.1rem;color:var(--muted)}
+.head{display:grid;gap:12px;margin-bottom:34px}
+.note{font-size:.82rem;color:var(--muted);margin-top:16px}
+
+/* stadium light behind the glass */
+.bg{position:fixed;inset:0;z-index:-1;overflow:hidden;background:radial-gradient(120% 80% at 50% 0%,#1a0d12 0%,var(--ink) 60%)}
+.blob{position:absolute;border-radius:50%;filter:blur(90px);opacity:.55;will-change:transform}
+.b1{width:46vmax;height:46vmax;background:var(--red);left:-12vmax;top:-10vmax;animation:drift1 26s ease-in-out infinite alternate}
+.b2{width:38vmax;height:38vmax;background:var(--gold);right:-14vmax;top:18vh;opacity:.38;animation:drift2 32s ease-in-out infinite alternate}
+.b3{width:34vmax;height:34vmax;background:var(--violet);left:20vw;bottom:-18vmax;opacity:.32;animation:drift3 30s ease-in-out infinite alternate}
+.b4{width:24vmax;height:24vmax;background:var(--teal);right:8vw;bottom:-8vmax;opacity:.2;animation:drift1 36s ease-in-out infinite alternate-reverse}
+@keyframes drift1{to{transform:translate(8vmax,6vmax) scale(1.12)}}
+@keyframes drift2{to{transform:translate(-9vmax,-5vmax) scale(.92)}}
+@keyframes drift3{to{transform:translate(7vmax,-8vmax) scale(1.1)}}
+
+/* liquid glass */
+.glass{position:relative;border-radius:var(--r,26px);overflow:hidden;
+  background:linear-gradient(145deg,rgba(255,255,255,.15),rgba(255,255,255,.04) 55%,rgba(255,255,255,.09));
+  -webkit-backdrop-filter:blur(22px) saturate(170%);backdrop-filter:blur(22px) saturate(170%);
+  border:1px solid var(--edge);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.42),inset 0 -14px 28px rgba(255,255,255,.03),0 22px 54px rgba(0,0,0,.4);
+  transition:transform .35s cubic-bezier(.2,.8,.2,1),border-color .35s,box-shadow .35s}
+.glass::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .3s;
+  background:radial-gradient(260px circle at var(--mx,50%) var(--my,0%),rgba(255,255,255,.26),transparent 62%)}
+.glass:hover::before{opacity:1}
+.lift:hover{transform:translateY(-5px);border-color:rgba(255,255,255,.34)}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 26px;border-radius:99px;border:1px solid rgba(255,255,255,.3);font:inherit;font-weight:800;text-decoration:none;cursor:pointer;color:#fff;
+  background:linear-gradient(180deg,rgba(255,255,255,.2),rgba(255,255,255,.05));-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 10px 26px rgba(0,0,0,.35);transition:transform .25s,filter .25s}
+.btn:hover{transform:translateY(-2px);filter:brightness(1.15)}
+.btn.red{background:linear-gradient(180deg,#ff5a66,#c4121f);border-color:rgba(255,160,166,.6);box-shadow:inset 0 1px 0 rgba(255,255,255,.55),0 12px 30px rgba(229,32,46,.45)}
+.btn.sm{padding:10px 18px;font-size:.9rem}
+.row{display:flex;gap:12px;flex-wrap:wrap}
+
+/* header */
+header.top{position:sticky;top:calc(env(safe-area-inset-top,0px) + 10px);z-index:60;margin-top:10px}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 10px 8px 14px;--r:99px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--text);min-width:0}
+.brand img{height:42px;width:auto;flex:none}
+.brand b{display:block;font-family:var(--font-display);font-weight:900;font-size:1.45rem;letter-spacing:.04em;line-height:1}
+.brand small{display:block;font-size:.68rem;font-weight:700;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;white-space:nowrap}
+nav ul{list-style:none;margin:0;padding:0;display:flex;gap:2px}
+nav a{display:block;padding:8px 12px;border-radius:99px;text-decoration:none;color:var(--text);font-weight:700;font-size:.88rem;transition:background .25s}
+nav a:hover{background:rgba(255,255,255,.12)}
+nav a.active{background:rgba(255,255,255,.2);box-shadow:inset 0 1px 0 rgba(255,255,255,.4)}
+.tools{display:flex;align-items:center;gap:8px}
+#menuBtn{display:none;width:44px;height:44px;border-radius:50%;border:1px solid var(--edge);background:rgba(255,255,255,.1);color:#fff;font-size:1.2rem;cursor:pointer}
+@media(max-width:1280px){
+  #menuBtn{display:grid;place-items:center}
+  nav{display:none;position:absolute;left:0;right:0;top:calc(100% + 10px)}
+  nav.open{display:block}
+  nav .glass{padding:10px;--r:24px}
+  nav ul{flex-direction:column}
+  nav a{padding:13px 16px}
+}
+@media(max-width:420px){.brand small{display:none}.tools .btn{padding:9px 14px}}
+
+/* hero */
+.hero{padding-block:56px 40px;position:relative}
+.hero-grid{display:grid;gap:40px;grid-template-columns:1.25fr 1fr;align-items:center}
+.hero h1{font-size:clamp(3.4rem,10.5vw,7.6rem);line-height:.88;font-weight:900}
+.hero h1 em{font-style:normal;background:linear-gradient(100deg,var(--red-hot),var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .sub{font-size:1.15rem;color:var(--muted);margin-top:22px;max-width:46ch}
+.hero .row{margin-top:30px}
+.stage{display:grid;place-items:center;position:relative;min-height:340px}
+.orb{--r:50%;width:min(86vw,380px);aspect-ratio:1;display:grid;place-items:center;position:relative;border-radius:50%}
+.orb::after{content:"";position:absolute;inset:-3px;border-radius:50%;padding:3px;background:conic-gradient(from 0deg,var(--red),var(--gold),transparent 40%,var(--red));-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;animation:spin 14s linear infinite;pointer-events:none}
+@keyframes spin{to{transform:rotate(360deg)}}
+.orb img{width:58%;height:auto;filter:drop-shadow(0 18px 30px rgba(0,0,0,.55));animation:float 6s ease-in-out infinite;position:relative;z-index:1}
+@keyframes float{50%{transform:translateY(-10px)}}
+.lanes{height:74px;margin-top:44px;border-radius:20px;background:repeating-linear-gradient(180deg,rgba(255,198,46,.5) 0 2px,transparent 2px 12px);-webkit-mask-image:linear-gradient(90deg,transparent,#000 15%,#000 85%,transparent);mask-image:linear-gradient(90deg,transparent,#000 15%,#000 85%,transparent);opacity:.6}
+.strip{display:flex;flex-wrap:wrap;gap:6px 16px;align-items:center;padding:16px 24px;--r:26px;margin-top:-4px}
+.strip b{font-family:var(--font-display);text-transform:uppercase;font-size:1.4rem;letter-spacing:.03em}
+.strip .when{color:var(--gold);font-weight:800}
+.strip a{margin-left:auto;font-weight:800;text-decoration:none}
+.live{display:inline-flex;align-items:center;gap:8px;font-size:.75rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--red-hot)}
+.live::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--red-hot);box-shadow:0 0 0 0 rgba(255,69,83,.7);animation:pulse 2s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 10px rgba(255,69,83,0)}100%{box-shadow:0 0 0 0 rgba(255,69,83,0)}}
+@media(max-width:860px){.hero-grid{grid-template-columns:1fr}.stage{order:-1;min-height:0}.orb{width:min(70vw,300px)}.strip a{margin-left:0}}
+
+/* events */
+.two{display:grid;gap:22px;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));align-items:start}
+.panel{padding:28px;display:grid;gap:6px;align-content:start}
+.panel h3{margin-bottom:12px}
+.item{display:grid;grid-template-columns:auto 1fr;gap:16px;padding:16px 0;border-top:1px solid rgba(255,255,255,.12);align-items:start}
+.item:first-of-type{border-top:0}
+.dt{min-width:62px;text-align:center;padding:8px 6px;border-radius:16px;background:linear-gradient(160deg,rgba(255,255,255,.2),rgba(255,255,255,.05));border:1px solid var(--edge);box-shadow:inset 0 1px 0 rgba(255,255,255,.4)}
+.dt b{display:block;font-family:var(--font-display);font-size:1.9rem;line-height:1;font-weight:900}
+.dt small{font-weight:800;letter-spacing:.12em;text-transform:uppercase;font-size:.68rem;color:var(--gold)}
+.item h4{font-size:1.2rem;margin-bottom:2px}
+.item p{color:var(--muted);font-size:.93rem}
+.item.next .dt{background:linear-gradient(160deg,#ff5a66,#c4121f);border-color:rgba(255,160,166,.6)}
+.item.next .dt small{color:#fff}
+.tag{display:inline-block;width:fit-content;padding:3px 10px;border-radius:99px;background:rgba(255,69,83,.22);border:1px solid rgba(255,120,130,.7);font-weight:800;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px}
+
+/* next event: one poster plus details */
+.next{--r:30px;display:grid;grid-template-columns:minmax(0,400px) minmax(0,1fr)}
+.poster{position:relative;display:block;width:100%;aspect-ratio:4/5;padding:0;border:0;border-radius:0;cursor:pointer;color:#fff;font:inherit;overflow:hidden}
+.poster img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .6s}
+.poster:hover img{transform:scale(1.04)}
+.poster .ph{position:absolute;inset:0;display:grid;place-items:center;align-content:center;gap:14px}
+.poster .ph::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(115deg,rgba(255,255,255,.1) 0 2px,transparent 2px 22px)}
+.poster .ph svg{width:34%;opacity:.55;position:relative}
+.poster .ph span{position:relative;padding:8px 16px;border-radius:99px;background:rgba(10,10,14,.45);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.25);font-weight:800;font-size:.8rem;letter-spacing:.1em;text-transform:uppercase}
+.nxinfo{padding:34px;display:grid;gap:16px;align-content:center;min-width:0}
+.nxinfo h3{font-size:clamp(2.4rem,5vw,4rem);line-height:.95}
+.nxinfo p{color:var(--muted);font-size:1.05rem}
+.nxfacts{display:flex;flex-wrap:wrap;gap:10px}
+.nxfacts span{padding:8px 16px;border-radius:99px;background:rgba(255,255,255,.1);border:1px solid var(--edge);font-weight:800;box-shadow:inset 0 1px 0 rgba(255,255,255,.3)}
+.nxfacts span.gold{color:var(--gold)}
+@media(max-width:820px){.next{grid-template-columns:1fr}.poster{aspect-ratio:4/5;max-height:70vh}.nxinfo{padding:26px}}
+
+/* event photo cards */
+.evgrid{display:grid;gap:14px;grid-template-columns:repeat(3,1fr);grid-auto-rows:210px;grid-auto-flow:dense;margin-bottom:26px}
+.evc.first{grid-column:span 2;grid-row:span 2}
+@media(min-width:901px){.evc:nth-child(4):last-child{grid-column:span 3}}
+.evc .cap{white-space:normal;border-radius:20px;padding:10px 16px;display:grid;gap:2px}
+.evc .cap b{font-family:var(--font-display);text-transform:uppercase;font-size:1.3rem;line-height:1.05;letter-spacing:.01em}
+.evc .cap span{font-size:.82rem;color:var(--muted);font-weight:600}
+.evc.first .cap b{font-size:2rem}
+.evc .dtb{position:absolute;top:12px;left:12px;min-width:58px;text-align:center;padding:7px 8px;border-radius:16px;background:rgba(10,10,14,.5);-webkit-backdrop-filter:blur(14px) saturate(160%);backdrop-filter:blur(14px) saturate(160%);border:1px solid rgba(255,255,255,.3);box-shadow:inset 0 1px 0 rgba(255,255,255,.35)}
+.evc .dtb b{display:block;font-family:var(--font-display);font-size:1.7rem;line-height:1;font-weight:900}
+.evc .dtb small{font-weight:800;letter-spacing:.12em;text-transform:uppercase;font-size:.66rem;color:var(--gold)}
+.evc .tag.nx{position:absolute;top:14px;right:12px;margin:0;background:linear-gradient(180deg,#ff5a66,#c4121f);border-color:rgba(255,160,166,.7)}
+.annrow{display:grid;gap:4px 32px;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr))}
+.annrow .item{border-top:0;padding:10px 0}
+@media(max-width:900px){.evgrid{grid-template-columns:repeat(2,1fr);grid-auto-rows:190px}}
+@media(max-width:560px){.evgrid{grid-template-columns:1fr;grid-auto-rows:220px}.evc.first{grid-column:auto;grid-row:span 1}.evc.first .cap b{font-size:1.5rem}}
+
+/* about */
+.split{display:grid;gap:34px;grid-template-columns:1fr 1.1fr;align-items:start}
+.trio{display:grid;gap:16px}
+.trio .glass{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center;padding:20px 22px;--r:22px}
+.trio h4{color:var(--gold)}
+.trio p{color:var(--muted);font-size:.96rem}
+.bullet{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(145deg,var(--red),#7d0b14);box-shadow:inset 0 1px 0 rgba(255,255,255,.45)}
+.bullet svg{width:26px;height:26px;stroke:#fff}
+@media(max-width:860px){.split{grid-template-columns:1fr}}
+
+/* leaders and coaches */
+.people{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr))}
+#coachList{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media(max-width:860px){#coachList{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:520px){#coachList{grid-template-columns:minmax(0,1fr)}}
+.person{padding:30px 22px;display:grid;justify-items:center;text-align:center;gap:6px;align-content:start}
+.avatar{width:132px;height:132px;border-radius:50%;position:relative;display:grid;place-items:center;margin-bottom:12px;overflow:hidden;background:linear-gradient(145deg,rgba(255,198,46,.3),rgba(229,32,46,.32));box-shadow:0 0 0 3px rgba(255,198,46,.85),0 0 0 8px rgba(255,255,255,.1),0 14px 30px rgba(0,0,0,.45)}
+.avwrap{position:relative;margin-bottom:12px}
+.avwrap.tagged{margin-bottom:26px}
+.avwrap .avatar{margin-bottom:0}
+.avtag{position:absolute;left:50%;bottom:-14px;transform:translateX(-50%);width:max-content;display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:6px 14px 6px 10px;line-height:1;border-radius:99px;white-space:nowrap;font-weight:800;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--text);background:rgba(14,15,22,.62);-webkit-backdrop-filter:blur(14px) saturate(160%);backdrop-filter:blur(14px) saturate(160%);border:1px solid rgba(255,198,46,.6);box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 8px 18px rgba(0,0,0,.4)}
+.avtag img{height:16px;width:auto;max-width:none;flex:none;display:block}
+.avatar img{width:100%;height:100%;object-fit:cover;display:block}
+.avatar svg{width:58%;height:58%;color:rgba(255,255,255,.78)}
+.person h4{font-size:1.7rem}
+.role{color:var(--gold);font-weight:800;letter-spacing:.1em;text-transform:uppercase;font-size:.78rem}
+.lic{margin-top:10px;display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:99px;font-weight:800;font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--edge);background:rgba(255,255,255,.08);color:var(--muted)}
+.lic.ok{background:rgba(34,199,184,.18);border-color:rgba(34,199,184,.6);color:#8FF0E6}
+.lic svg{width:14px;height:14px;flex:none}
+.chip[aria-selected="true"]{background:linear-gradient(180deg,#ff5a66,#c4121f);border-color:rgba(255,160,166,.6);box-shadow:inset 0 1px 0 rgba(255,255,255,.5)}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px}
+.tabs .chip{padding:11px 22px;font-size:.95rem}
+
+/* other activities: slideshow cards */
+.acts{display:grid;gap:18px;grid-template-columns:repeat(3,minmax(0,1fr))}
+.act{display:grid;align-content:start;--r:24px}
+.act.wide{grid-column:1/-1;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);align-content:stretch}
+.show{position:relative;aspect-ratio:4/3;overflow:hidden;background:#07080C;touch-action:pan-y}
+.act.wide .show{aspect-ratio:auto;min-height:340px}
+.slide{position:absolute;inset:0;width:100%;height:100%;padding:0;border:0;color:#fff;font:inherit;cursor:pointer;opacity:0;transition:opacity .7s ease;display:block}
+.slide{pointer-events:none}
+.slide.on{opacity:1;pointer-events:auto}
+.slide img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.show.contain .slide img{object-fit:contain;background:#07080C}
+.slide .ph{position:absolute;inset:0;display:grid;place-items:center;align-content:center;gap:12px}
+.slide .ph::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(115deg,rgba(255,255,255,.1) 0 2px,transparent 2px 22px)}
+.slide .ph svg{width:26%;max-width:96px;opacity:.55;position:relative}
+.slide .ph span{position:relative;padding:6px 14px;border-radius:99px;background:rgba(10,10,14,.45);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.25);font-weight:800;font-size:.74rem;letter-spacing:.1em;text-transform:uppercase}
+.ctl{position:absolute;top:50%;transform:translateY(-50%);width:38px;height:38px;border-radius:50%;border:1px solid rgba(255,255,255,.3);background:rgba(10,10,14,.45);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);color:#fff;font:inherit;font-size:1rem;cursor:pointer;display:grid;place-items:center;z-index:2;padding:0;transition:background .25s}
+.ctl:hover{background:rgba(255,255,255,.22)}
+.ctl.prev{left:10px}.ctl.next{right:10px}
+.dots{position:absolute;left:0;right:0;bottom:12px;display:flex;justify-content:center;align-items:center;gap:8px;z-index:2}
+.dots button{position:relative;width:8px;height:8px;border-radius:99px;border:0;padding:0;background:rgba(255,255,255,.5);cursor:pointer;transition:width .3s,background .3s}
+.dots button::after{content:"";position:absolute;inset:-9px -4px}
+.dots button[aria-current="true"]{width:22px;background:var(--gold)}
+.actbody{padding:18px 20px 22px;display:grid;gap:8px;align-content:start}
+.actbody h4{font-size:1.5rem}
+.act.wide .actbody{align-content:center;padding:30px}
+.act.wide .actbody h4{font-size:2.3rem}
+@media(max-width:860px){.acts{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.acts{grid-template-columns:minmax(0,1fr)}.act.wide{grid-template-columns:minmax(0,1fr)}.act.wide .show{aspect-ratio:4/3;min-height:0}.act.wide .actbody{padding:18px 20px 22px}.act.wide .actbody h4{font-size:1.5rem}}
+@media(prefers-reduced-motion:reduce){.slide{transition:none}}
+
+/* sports */
+.cards{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))}
+.sport{padding:24px;display:grid;gap:14px;align-content:start}
+.sport.feat{grid-column:1/-1;grid-template-columns:auto 1fr;gap:26px;align-items:center;padding:30px;background:linear-gradient(145deg,rgba(255,198,46,.2),rgba(229,32,46,.14) 55%,rgba(255,255,255,.07))}
+.sport.feat .ico{width:96px;height:96px;border-radius:28px}
+.sport.feat .ico svg{width:56px;height:56px}
+.sport.feat h3{font-size:2.8rem}
+.sport .txt{display:grid;gap:10px}
+.ico{width:64px;height:64px;border-radius:20px;display:grid;place-items:center;background:linear-gradient(145deg,rgba(255,198,46,.28),rgba(229,32,46,.25));border:1px solid var(--edge);box-shadow:inset 0 1px 0 rgba(255,255,255,.4)}
+.ico svg{width:36px;height:36px}
+svg.i{fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.ico svg.i{color:#fff}
+.sport p{color:var(--muted);font-size:.96rem}
+.meta{font-size:.8rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--gold)}
+@media(max-width:560px){.sport.feat{grid-template-columns:1fr}}
+
+/* achievements */
+.ach{padding:26px;display:grid;gap:12px;align-content:start}
+.ach .yr{font-family:var(--font-display);font-weight:900;font-size:3.4rem;line-height:.9;background:linear-gradient(180deg,var(--gold),var(--red-hot));-webkit-background-clip:text;background-clip:text;color:transparent}
+.ach p{color:var(--muted);font-size:.95rem}
+.pos{display:inline-block;width:fit-content;padding:4px 12px;border-radius:99px;background:rgba(255,198,46,.16);border:1px solid rgba(255,198,46,.5);color:var(--gold);font-weight:800;font-size:.78rem;letter-spacing:.06em;text-transform:uppercase}
+
+/* gallery */
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px}
+.chip{border:1px solid var(--edge);background:rgba(255,255,255,.07);color:var(--text);border-radius:99px;padding:9px 18px;font:inherit;font-weight:700;font-size:.9rem;cursor:pointer;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);transition:background .25s}
+.chip:hover{background:rgba(255,255,255,.16)}
+.chip[aria-pressed="true"]{background:linear-gradient(180deg,#ff5a66,#c4121f);border-color:rgba(255,160,166,.6);box-shadow:inset 0 1px 0 rgba(255,255,255,.5)}
+.gal{display:grid;gap:14px;grid-template-columns:repeat(4,1fr);grid-auto-rows:176px;grid-auto-flow:dense}
+.tile{position:relative;border-radius:22px;overflow:hidden;border:1px solid var(--edge);padding:0;cursor:pointer;color:#fff;font:inherit;text-align:left;display:block;min-width:0;box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 14px 34px rgba(0,0,0,.4);transition:transform .4s cubic-bezier(.2,.8,.2,1)}
+.tile:hover{transform:translateY(-4px) scale(1.01)}
+.tile.big{grid-column:span 2;grid-row:span 2}
+.tile.tall{grid-row:span 2}
+.tile.wide{grid-column:span 2}
+.tile .ph{position:absolute;inset:0;display:grid;place-items:center}
+.tile .ph::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(115deg,rgba(255,255,255,.1) 0 2px,transparent 2px 22px)}
+.tile .ph svg{width:46%;max-width:130px;height:auto;opacity:.5;position:relative}
+.tile img.pic{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .6s}
+.tile:hover img.pic{transform:scale(1.06)}
+.tile .cap{position:absolute;left:10px;right:10px;bottom:10px;padding:8px 14px;border-radius:99px;background:rgba(10,10,14,.45);-webkit-backdrop-filter:blur(14px) saturate(160%);backdrop-filter:blur(14px) saturate(160%);border:1px solid rgba(255,255,255,.22);font-size:.82rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tile .cap i{font-style:normal;color:var(--gold);margin-right:6px}
+@media(max-width:900px){.gal{grid-template-columns:repeat(3,1fr);grid-auto-rows:150px}}
+@media(max-width:560px){.gal{grid-template-columns:repeat(2,1fr);grid-auto-rows:140px;gap:10px}.tile .cap{font-size:.74rem;padding:6px 10px}}
+
+/* tournaments */
+.tour{display:grid;gap:14px}
+.trow{display:grid;grid-template-columns:1fr 1fr;gap:12px 16px;align-items:center;padding:20px 22px;--r:22px}
+.trow>div:first-child{grid-column:1/-1}
+.trow h4{font-size:1.4rem}
+.trow small{display:block;color:var(--muted);font-weight:700;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase}
+.trow span.v{font-weight:700}
+.st{padding:6px 14px;border-radius:99px;font-weight:800;font-size:.76rem;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--edge);background:rgba(255,255,255,.1);white-space:nowrap;justify-self:start}
+.st.open{background:rgba(255,69,83,.22);border-color:rgba(255,120,130,.7)}
+.st.soon{background:rgba(255,198,46,.18);border-color:rgba(255,198,46,.6);color:var(--gold)}
+
+/* forms */
+.form{display:grid;gap:16px}
+.fgrid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr))}
+label,legend{display:grid;gap:6px;font-weight:700;font-size:.9rem;padding:0}
+label.req::after,legend.req::after{content:" *";color:var(--gold)}
+label.req,legend.req{display:block}
+label.req>*{margin-top:6px}
+input,select,textarea{font:inherit;color:var(--text);background:rgba(255,255,255,.08);border:1px solid var(--edge);border-radius:14px;padding:12px 14px;width:100%;min-width:0;display:block;box-shadow:inset 0 1px 0 rgba(255,255,255,.12)}
+select option{background:#14161d;color:#f6f3ec}
+textarea{min-height:96px;resize:vertical}
+input::placeholder,textarea::placeholder{color:rgba(246,243,236,.45)}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(255,198,46,.25)}
+fieldset{border:0;margin:0;padding:0;min-width:0}
+.checks{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}
+.check{display:flex;align-items:center;gap:10px;padding:10px 16px;border-radius:99px;border:1px solid var(--edge);background:rgba(255,255,255,.07);cursor:pointer;font-weight:700}
+.check input{width:18px;height:18px;padding:0;box-shadow:none;accent-color:var(--red-hot);flex:none}
+.err{color:#ff8a93;font-size:.85rem;min-height:1.2em}
+.result{padding:22px;display:grid;gap:12px;margin-top:18px;--r:22px}
+.result h4{color:var(--gold)}
+.result p{color:var(--muted);font-size:.93rem}
+pre.msg{white-space:pre-wrap;overflow-wrap:anywhere;margin:0;padding:14px;border-radius:14px;background:rgba(0,0,0,.38);border:1px solid var(--edge);font:inherit;font-size:.9rem}
+.joinwrap{display:grid;gap:26px;grid-template-columns:1.4fr 1fr;align-items:start}
+.back{display:inline-flex;gap:8px;align-items:center;font-weight:800;text-decoration:none;margin-bottom:22px}
+.steps{list-style:none;margin:16px 0 0;padding:0;display:grid;gap:14px;counter-reset:s}
+.steps li{counter-increment:s;display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;color:var(--muted)}
+.steps li::before{content:counter(s);font-family:var(--font-display);font-weight:900;font-size:1.4rem;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(180deg,#ff5a66,#c4121f);color:#fff}
+.steps b{display:block;color:var(--text)}
+@media(max-width:860px){.joinwrap{grid-template-columns:1fr}}
+
+/* contact */
+.clist{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))}
+.crow{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:16px 20px;--r:20px}
+.crow small{display:block;color:var(--muted);font-weight:800;letter-spacing:.1em;text-transform:uppercase;font-size:.7rem}
+.crow .val{font-weight:800;overflow-wrap:anywhere;user-select:all}
+.copy{border:1px solid var(--edge);background:rgba(255,255,255,.1);color:#fff;border-radius:99px;padding:7px 16px;font:inherit;font-weight:800;font-size:.82rem;cursor:pointer}
+.copy:hover{background:rgba(255,255,255,.2)}
+
+/* dialogs */
+dialog{border:0;padding:0;background:transparent;color:var(--text);max-width:min(900px,calc(100vw - 24px));width:100%;overflow:visible}
+dialog::backdrop{background:rgba(5,5,8,.7);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.lb{--r:28px;padding:14px;display:grid;gap:12px}
+.lbimg{aspect-ratio:16/10;border-radius:20px;overflow:hidden;position:relative;display:grid;place-items:center;max-height:70vh;width:100%}
+.lbimg img{width:100%;height:100%;object-fit:contain;background:#000}
+.lbimg svg{width:30%;opacity:.5;position:relative}
+.lbimg::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(115deg,rgba(255,255,255,.1) 0 2px,transparent 2px 22px)}
+.lbbar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:0 6px 4px}
+.lbbar strong{font-weight:800}
+.nav{display:flex;gap:8px}
+.foot a.gold{color:var(--gold);font-weight:800}
+.uses{list-style:none;margin:4px 0 6px;padding:0;display:grid;gap:10px}
+.uses li{display:flex;gap:12px;align-items:flex-start;color:var(--muted)}
+.uses li::before{content:"";flex:none;width:10px;height:10px;margin-top:8px;border-radius:50%;background:linear-gradient(135deg,var(--red-hot),var(--gold))}
+.uses b{color:var(--text)}
+
+footer{padding-block:20px 40px}
+.foot{display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between;padding:22px 26px;--r:28px}
+.foot .brand img{height:48px}
+.foot ul{list-style:none;margin:0;padding:0;display:flex;gap:16px;flex-wrap:wrap;align-items:center}
+.foot a,.linkbtn{color:var(--text);text-decoration:none;font-weight:700;font-size:.9rem;background:none;border:0;padding:0;font-family:inherit;cursor:pointer}
+.foot a:hover,.linkbtn:hover{color:var(--gold)}
+.linkbtn{color:var(--gold);font-weight:800}
+.fine{width:100%;color:var(--muted);font-size:.82rem}
+
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .blob,.orb::after,.orb img,.live::before{animation:none}
+  .glass,.btn,.tile{transition:none}
+}
+</style>
+<style>html,body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+
+
+<div class="bg" aria-hidden="true"><i class="blob b1"></i><i class="blob b2"></i><i class="blob b3"></i><i class="blob b4"></i></div>
+
+<header class="top"><div class="wrap">
+  <div class="bar glass">
+    <a class="brand" href="#home" aria-label="Track Force Sports Club home">
+      <img src="tfsc-logo.png" alt="TFSC logo" width="37" height="42">
+      <span><b>TFSC</b><small>Track Force Sports Club</small></span>
+    </a>
+    <nav id="nav" aria-label="Main"><div class="glass"><ul>
+      <li><a href="#next">Next event</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#leaders">Team</a></li>
+      <li><a href="#gallery">Gallery</a></li>
+      <li><a href="#announcements">News</a></li>
+      <li><a href="#events">Events</a></li>
+      <li><a href="#football">Football</a></li>
+      <li><a href="#achievements">Awards</a></li>
+      <li><a href="#tournaments">Tournaments</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul></div></nav>
+    <div class="tools">
+      <a class="btn red sm" href="#join-tfsc">Join TFSC</a>
+      <button id="menuBtn" type="button" aria-label="Open menu" aria-expanded="false">☰</button>
+    </div>
+  </div>
+</div></header>
+
+<div id="mainView">
+<div class="hero" id="home"><div class="wrap">
+  <div class="hero-grid">
+    <div>
+      <div class="eyebrow">A node of SIO · Students Islamic Organisation</div>
+      <h1>Train hard. Play fair. <em>Rise</em> together.</h1>
+      <p class="sub">Track Force Sports Club is all about football. Train with us, play with us and grow with us.</p>
+      <div class="row"><a class="btn red" href="#join-tfsc">Join TFSC</a><a class="btn" href="#gallery">See our gallery</a></div>
+    </div>
+    <div class="stage"><div class="orb glass"><img src="tfsc-logo.png" alt="TFSC Track Force Sports Club shield logo" width="414" height="471"></div></div>
+  </div>
+  <div class="lanes" aria-hidden="true"></div>
+</div></div>
+
+<section id="next" style="padding-top:36px"><div class="wrap">
+  <div class="head"><div class="eyebrow">Next event</div><h2>Do not miss it</h2></div>
+  <div class="next glass" id="nextCard"></div>
+  <p class="note">Sample event. Add the real event poster and details.</p>
+</div></section>
+
+<section id="about"><div class="wrap">
+  <div class="split">
+    <div class="head" style="margin:0"><div class="eyebrow">About us</div><h2>One club. One team spirit.</h2>
+    <p class="lead">TFSC is the sporting wing of the Students Islamic Organisation. We give students a place to train, compete and grow with character.</p></div>
+    <div class="trio">
+      <div class="glass"><div class="bullet"><svg class="i" viewBox="0 0 48 48"><path d="M8 38h32M14 38V24M24 38V12M34 38V30"/></svg></div><div><h4>Train</h4><p>Regular sessions for every level.</p></div></div>
+      <div class="glass"><div class="bullet"><svg class="i" viewBox="0 0 48 48"><path d="M14 8h20v10a10 10 0 0 1-20 0zM14 12H7v3a7 7 0 0 0 7 7M34 12h7v3a7 7 0 0 1-7 7M24 28v8M16 40h16"/></svg></div><div><h4>Compete</h4><p>Matches and tournaments, on and off campus.</p></div></div>
+      <div class="glass"><div class="bullet"><svg class="i" viewBox="0 0 48 48"><path d="M24 40S8 31 8 19a8 8 0 0 1 16-2 8 8 0 0 1 16 2c0 12-16 21-16 21z"/></svg></div><div><h4>Serve</h4><p>Sport with discipline, fair play and care for others.</p></div></div>
+    </div>
+  </div>
+</div></section>
+
+<section id="leaders" style="padding-top:20px"><div class="wrap">
+  <div class="head"><div class="eyebrow">Leadership</div><h2>Our leaders</h2></div>
+  <div class="people" id="leaderList"></div>
+  <p class="note">Placeholder avatars. Add each leader's photo to replace them.</p>
+</div></section>
+
+<section id="coaches"><div class="wrap">
+  <div class="head"><div class="eyebrow">Coaching</div><h2>Our coaches</h2>
+  <p class="lead" id="coachLead"></p></div>
+  <div class="tabs" role="tablist" aria-label="Coach groups" id="coachTabs"></div>
+  <div class="people" id="coachList" role="tabpanel"></div>
+  <p class="note">Placeholder names and avatars. Add real names, photos and licence details when you have them.</p>
+</div></section>
+
+<section id="gallery"><div class="wrap">
+  <div class="head"><div class="eyebrow">Gallery</div><h2>Our game, in pictures</h2>
+  <p class="lead">Match days, training and tournament moments. Tap any tile to open it.</p></div>
+  <div class="chips" id="galFilter" aria-label="Filter gallery by sport"></div>
+  <div class="gal" id="gal"></div>
+  <p class="note">These tiles are placeholders. Real photos will replace them.</p>
+</div></section>
+
+<section id="announcements"><div class="wrap">
+  <div class="head"><div class="eyebrow">News</div><h2>Announcements</h2></div>
+  <div class="panel glass"><div class="annrow" id="annList"></div></div>
+  <p class="note">Sample announcements. Replace them with real ones.</p>
+</div></section>
+
+<section id="events"><div class="wrap">
+  <div class="head"><div class="eyebrow">Events</div><h2>Upcoming events</h2>
+  <p class="lead">Everything coming up at TFSC. Tap a photo to open it.</p></div>
+  <div class="evgrid" id="evGrid"></div>
+  <p class="note">Sample events. Replace them with real ones and add a poster or photo for each.</p>
+</div></section>
+
+<section id="football"><div class="wrap">
+  <div class="head"><div class="eyebrow">Football</div><h2>Our game</h2></div>
+  <div class="cards" id="footballCards"></div>
+  <p class="note">Sample timings. Replace them with TFSC's real schedule.</p>
+</div></section>
+
+<section id="achievements"><div class="wrap">
+  <div class="head"><div class="eyebrow">Achievements</div><h2>Proud moments</h2></div>
+  <div class="cards" id="achCards"></div>
+  <p class="note">Sample achievements. Replace them with TFSC's real record.</p>
+</div></section>
+
+<section id="activities"><div class="wrap">
+  <div class="head"><div class="eyebrow">Beyond football</div><h2>Other activities</h2>
+  <p class="lead">We serve the community and bring people together off the pitch too. Tap a photo to see it larger.</p></div>
+  <div class="acts" id="actGrid"></div>
+  <p class="note">Placeholder slides. Add the real photos to each activity, and the brochure pages for blood donation and clothes and food distribution.</p>
+</div></section>
+
+<section id="tournaments"><div class="wrap">
+  <div class="head"><div class="eyebrow">Tournaments</div><h2>Play in our tournaments</h2>
+  <p class="lead">When TFSC hosts a tournament, other teams can enter. Pick a tournament and register your team.</p></div>
+  <div class="two">
+    <div class="tour" id="tourList"></div>
+    <div class="panel glass">
+      <h3>Register your team</h3>
+      <form class="form" id="teamForm" novalidate>
+        <label class="req">Team name<input id="t-team" name="team" data-l="Team name" required autocomplete="organization"></label>
+        <label class="req">Tournament<select id="t-tour" name="tour" data-l="Tournament" required></select></label>
+        <div class="fgrid">
+          <label class="req">Captain or contact name<input id="t-name" name="captain" data-l="Contact name" required autocomplete="name"></label>
+          <label class="req">Phone or WhatsApp<input id="t-phone" name="phone" data-l="Phone" type="tel" required autocomplete="tel"></label>
+        </div>
+        <div class="fgrid">
+          <label>Email<input id="t-email" name="email" data-l="Email" type="email" autocomplete="email"></label>
+          <label>City<input id="t-city" name="city" data-l="City" autocomplete="address-level2"></label>
+        </div>
+        <div class="fgrid">
+          <label class="req">College or club<input id="t-org" name="org" data-l="College or club" required></label>
+          <label>Number of players<input id="t-count" name="count" data-l="Players" type="number" min="1" max="40" inputmode="numeric"></label>
+        </div>
+        <label>Anything else we should know<textarea id="t-msg" name="msg" data-l="Notes"></textarea></label>
+        <div class="err" id="t-err" role="alert"></div>
+        <button class="btn red" type="submit">Prepare team entry</button>
+      </form>
+      <div class="result glass" id="t-res" hidden>
+        <h4>Your team entry is ready</h4>
+        <p>Nothing is sent until you tap send. TFSC will reply with entry details and fees.</p>
+        <pre class="msg"></pre>
+        <div class="row"><a class="btn red wa" target="_blank" rel="noopener">Send on WhatsApp</a><button class="btn cp" type="button">Copy details</button></div>
+        <p class="fb"></p>
+      </div>
+    </div>
+  </div>
+  <p class="note">Sample tournament name and sport. Replace them with the real details.</p>
+</div></section>
+
+<section id="contact"><div class="wrap">
+  <div class="head"><div class="eyebrow">Contact us</div><h2>Get in touch</h2>
+  <p class="lead">Questions about training, events or tournaments? Reach out.</p></div>
+  <div class="clist" id="contactList"></div>
+  <p class="note">Placeholder details. Replace them with TFSC's real phone, email and social handles.</p>
+</div></section>
+</div>
+
+<div id="joinView" hidden>
+<section style="padding-top:48px"><div class="wrap">
+  <a class="back" href="#home">← Back to home</a>
+  <div class="head"><div class="eyebrow">Join TFSC</div><h2>Join the squad</h2>
+  <p class="lead">Tell us about yourself and how you play football. Players of every level are welcome.</p></div>
+  <div class="joinwrap">
+    <div class="panel glass">
+      <form class="form" id="joinForm" novalidate>
+        <div class="fgrid">
+          <label class="req">Full name<input id="j-name" name="name" data-l="Name" required autocomplete="name"></label>
+          <label class="req">Phone or WhatsApp<input id="j-phone" name="phone" data-l="Phone" type="tel" required autocomplete="tel"></label>
+        </div>
+        <div class="fgrid">
+          <label>Email<input id="j-email" name="email" data-l="Email" type="email" autocomplete="email"></label>
+          <label class="req">College or institution<input id="j-org" name="org" data-l="College" required></label>
+        </div>
+        <div class="fgrid">
+          <label>Course and year<input id="j-course" name="course" data-l="Course and year"></label>
+          <label>Your experience<select id="j-exp" name="exp" data-l="Experience"><option value="">Choose</option><option>Beginner</option><option>Some experience</option><option>Experienced</option></select></label>
+        </div>
+        <label class="req">Preferred position<select id="j-role" name="role" data-l="Preferred position" required><option value="">Choose</option><option>Goalkeeper</option><option>Defender</option><option>Midfielder</option><option>Forward</option><option>Not sure yet</option></select></label>
+        <label>Anything else you would like to tell us<textarea id="j-msg" name="msg" data-l="Notes"></textarea></label>
+        <div class="err" id="j-err" role="alert"></div>
+        <button class="btn red" type="submit">Prepare my request</button>
+      </form>
+      <div class="result glass" id="j-res" hidden>
+        <h4>Your request is ready</h4>
+        <p>Nothing is sent until you tap send. A TFSC coordinator will get back to you.</p>
+        <pre class="msg"></pre>
+        <div class="row"><a class="btn red wa" target="_blank" rel="noopener">Send on WhatsApp</a><button class="btn cp" type="button">Copy details</button></div>
+        <p class="fb"></p>
+      </div>
+    </div>
+    <div class="panel glass">
+      <h3>What happens next</h3>
+      <ol class="steps">
+        <li><div><b>Fill in your details</b>It takes about a minute.</div></li>
+        <li><div><b>Send them to TFSC</b>Share your details on WhatsApp, or copy them and send them to us.</div></li>
+        <li><div><b>Come to a session</b>A coordinator will tell you when and where to join in.</div></li>
+      </ol>
+    </div>
+  </div>
+</div></section>
+</div>
+
+<div id="supportView" hidden>
+<section style="padding-top:48px"><div class="wrap">
+  <a class="back" href="#home">← Back to home</a>
+  <div class="head"><div class="eyebrow">Support us</div><h2>Donate or sponsor TFSC</h2>
+  <p class="lead">Your support helps students train, travel and compete. Tell us how you would like to help and we will get in touch.</p></div>
+  <div class="joinwrap">
+    <div class="panel glass">
+      <form class="form" id="supForm" novalidate>
+        <div class="fgrid">
+          <label class="req">Full name<input id="s-name" name="name" data-l="Name" required autocomplete="name"></label>
+          <label class="req">Phone or WhatsApp<input id="s-phone" name="phone" data-l="Phone" type="tel" required autocomplete="tel"></label>
+        </div>
+        <div class="fgrid">
+          <label>Email<input id="s-email" name="email" data-l="Email" type="email" autocomplete="email"></label>
+          <label>Company or organisation<input id="s-org" name="org" data-l="Organisation" autocomplete="organization"></label>
+        </div>
+        <label class="req">How would you like to help<select id="s-type" name="type" data-l="Support type" required><option value="">Choose</option><option>Make a donation</option><option>Sponsor a team</option><option>Sponsor a tournament</option><option>Give kit or equipment</option><option>Something else</option></select></label>
+        <label>Amount or details<input id="s-amt" name="amt" data-l="Amount or details" placeholder="For example: an amount, or what you would like to give"></label>
+        <label>Message<textarea id="s-msg" name="msg" data-l="Message"></textarea></label>
+        <div class="err" id="s-err" role="alert"></div>
+        <button class="btn red" type="submit">Prepare my message</button>
+      </form>
+      <div class="result glass" id="s-res" hidden>
+        <h4>Your message is ready</h4>
+        <p>Nothing is sent until you tap send. A TFSC coordinator will get back to you.</p>
+        <pre class="msg"></pre>
+        <div class="row"><a class="btn red wa" target="_blank" rel="noopener">Send on WhatsApp</a><button class="btn cp" type="button">Copy details</button></div>
+        <p class="fb"></p>
+      </div>
+    </div>
+    <div class="panel glass">
+      <h3>Where your support goes</h3>
+      <ul class="uses">
+        <li><span><b>Kits and equipment.</b> Balls, nets, bibs and training gear.</span></li>
+        <li><span><b>Grounds and coaching.</b> Practice venues and qualified guidance.</span></li>
+        <li><span><b>Tournament costs.</b> Entry fees and team travel.</span></li>
+        <li><span><b>Opportunity.</b> Free places for students who cannot afford to play.</span></li>
+      </ul>
+      <p class="note" style="margin:8px 0 0">TFSC will share payment details once you get in touch. Please do not send money before that.</p>
+    </div>
+  </div>
+</div></section>
+</div>
+
+<footer><div class="wrap">
+  <div class="foot glass">
+    <a class="brand" href="#home"><img src="tfsc-logo.png" alt="TFSC logo" width="42" height="48"><span><b>TFSC</b><small>Track Force Sports Club</small></span></a>
+    <ul><li><a href="#gallery">Gallery</a></li><li><a href="#tournaments">Tournaments</a></li><li><a href="#join-tfsc">Join TFSC</a></li><li><a class="gold" href="#support-tfsc">Support us</a></li></ul>
+    <p class="fine">© 2026 Track Force Sports Club. A node of the Students Islamic Organisation (SIO).</p>
+  </div>
+</div></footer>
+
+<dialog id="lb" aria-label="Gallery viewer"><div class="lb glass">
+  <div class="lbimg" id="lbImg"></div>
+  <div class="lbbar"><strong id="lbCap"></strong>
+    <div class="nav"><button class="btn sm" id="lbPrev" type="button" aria-label="Previous">←</button><button class="btn sm" id="lbNext" type="button" aria-label="Next">→</button><button class="btn red sm" id="lbClose" type="button">Close</button></div>
+  </div>
+</div></dialog>
+
+<script>
+/* Edit the content below to update the page. */
+/* WhatsApp number that receives join and team requests: country code plus number, digits only, for example 919876543210. */
+var CONFIG={whatsapp:""};
+
+var ICON={
+ Football:'<circle cx="24" cy="24" r="17"/><path d="M24 17l6 4.5-2.3 7h-7.4l-2.3-7zM24 17V8M30 21.5l8-3M27.7 28.5l5 7M20.3 28.5l-5 7M18 21.5l-8-3"/>',
+ Cricket:'<path d="M30 6l9 6-17 25-9-6zM31 6l3-4"/><circle cx="10" cy="41" r="4"/>',
+ Volleyball:'<circle cx="24" cy="24" r="17"/><path d="M24 7c-5 9-3 17 6 24M8 19c9-3 17 1 21 12M40 19c-8-3-15-1-19 6"/>',
+ Blood:'<path d="M24 6C18 15 12 21 12 29a12 12 0 0 0 24 0c0-8-6-14-12-23z"/><path d="M18 30a6 6 0 0 0 5 6"/>',
+ Distribution:'<path d="M24 40S8 31 8 19a8 8 0 0 1 16-2 8 8 0 0 1 16 2c0 12-16 21-16 21z"/>',
+ Rally:'<path d="M12 42V8M12 10h24l-6 8 6 8H12"/>',
+ Ifthaar:'<path d="M32 8a16 16 0 1 0 8 26A14 14 0 0 1 32 8z"/><circle cx="35" cy="20" r="1.5"/>',
+ Screening:'<path d="M6 10h36v24H6zM16 42h16M24 34v8"/><path d="M21 16l10 6-10 6z"/>',
+ Workshop:'<path d="M8 10h14a4 4 0 0 1 4 4v26a3 3 0 0 0-3-3H8zM40 10H26v30a3 3 0 0 1 3-3h11z"/>'
+};
+function ico(k){return '<svg class="i" viewBox="0 0 48 48" aria-hidden="true">'+ICON[k]+'</svg>'}
+var FOOTBALL={
+ intro:"Football is the heart of TFSC. We train every week, pick match squads and play in tournaments.",
+ items:[
+  {h:"Training",t:"Wed and Sat · 5:30 PM",d:"Drills, fitness and small-sided games. Ground to be announced."},
+  {h:"Match squads",t:"Weekends",d:"Players are picked from training for friendlies and tournaments."},
+  {h:"All levels",t:"Beginners welcome",d:"Come as you are. Our coaches will help you improve."}
+ ]
+};
+var ACH=[
+ {y:"2025",p:"Champions",t:"Inter-college Football Cup",d:"Winners after an unbeaten run."},
+ {y:"2025",p:"Runners-up",t:"District Football League",d:"Finalists in a full-season league."},
+ {y:"2024",p:"Winners",t:"Five-a-side Football Cup",d:"Unbeaten through the group stage."},
+ {y:"2024",p:"Semi-finalists",t:"Inter-college Football League",d:"A strong first run for our new squad."}
+];
+var ANN=[
+ {d:"2026-11-20",t:"Join TFSC: registrations open",p:"Football players of every level are welcome."},
+ {d:"2026-11-18",t:"Tournament team entries are live",p:"Other teams can register from the Tournaments section."},
+ {d:"2026-11-10",t:"New football training slots",p:"Weekday evening sessions added."}
+];
+/* Add a poster or photo to an event by setting src, for example src:"photos/trials.jpg". */
+var EV=[
+ {d:"2026-12-06",s:"Football",t:"Football open trials",p:"All levels welcome · Ground to be announced",src:""},
+ {d:"2026-12-13",s:"Football",t:"Charity football match",p:"Fundraiser for kits · Ground to be announced",src:""},
+ {d:"2026-12-20",s:"Football",t:"Friendly match",p:"TFSC vs guest XI · Ground to be announced",src:""},
+ {d:"2026-12-27",s:"Football",t:"Annual football day",p:"Matches, awards and a day of football",src:""}
+];
+var TOUR=[
+ {n:"SIO Inter-Node Football Cup",s:"Football",d:"26 Dec 2026",v:"Venue to be announced",st:"Open for entry",c:"open"}
+];
+/* Leaders. Add a photo by setting src, for example src:"photos/aslam.jpg". */
+var LEADERS=[
+ {n:"Br. Aslam",r:"President",src:""},
+ {n:"Br. Adnan",r:"Secretary",src:""},
+ {n:"Br. Finoj",r:"Joint Secretary",src:""}
+];
+/* Coaches. Set lic to the licence details, for example lic:"AFC C Licence", and src to a photo. */
+var COACHES={
+ club:{tab:"TFSC coaches",lead:"Once TFSC players, now licensed coaches giving back to the club.",list:[
+  {n:"Coach name to be added",r:"Football coach",lic:"",src:""},
+  {n:"Coach name to be added",r:"Football coach",lic:"",src:""},
+  {n:"Coach name to be added",r:"Football coach",lic:"",src:""},
+  {n:"Coach name to be added",r:"Football coach",lic:"",src:""},
+  {n:"Coach name to be added",r:"Football coach",lic:"",src:""},
+  {n:"Coach name to be added",r:"Football coach",lic:"",src:""}
+ ]},
+ expert:{tab:"Expert coaches",lead:"Experienced experts who guide our players.",list:[
+  {n:"Expert name to be added",r:"Area of expertise",src:""},
+  {n:"Expert name to be added",r:"Area of expertise",src:""},
+  {n:"Expert name to be added",r:"Area of expertise",src:""}
+ ]}
+};
+/* Other activities. Add photos to imgs, for example imgs:["photos/rally1.jpg","photos/rally2.jpg"].
+   Set fit:"contain" for brochure pages so they are not cropped. With no photos, three placeholder slides show. */
+var ACT=[
+ {t:"Blood donation",tag:"Brochure",k:"Blood",fit:"contain",imgs:[]},
+ {t:"Clothes and food distribution",tag:"Brochure",k:"Distribution",fit:"contain",imgs:[]},
+ {t:"Rally",tag:"2026",k:"Rally",imgs:[]},
+ {t:"Ifthaar for seniors and juniors",tag:"2025 and 2026",k:"Ifthaar",imgs:[]},
+ {t:"World Cup screening",tag:"2022",k:"Screening",imgs:[]},
+ {t:"Juniors World Cup screening",tag:"2026",k:"Screening",imgs:[]},
+ {t:"Workshop for juniors",tag:"2025",k:"Workshop",imgs:[]}
+];
+var CONTACT=[
+ {k:"Phone / WhatsApp",v:"+91 00000 00000"},
+ {k:"Email",v:"tfsc@example.com"},
+ {k:"Instagram",v:"@tfsc_sports"}
+];
+/* Add photos by setting src, for example src:"photos/match1.jpg". */
+var GAL_RAW=[
+ ["Football","Match day"],["Cricket","Net practice"],["Football","Team huddle"],["Volleyball","Court play"],["Football","Goal celebration"],["Football","Penalty kick"],
+ ["Cricket","Match day"],["Football","Training drill"],["Volleyball","Serve"],["Football","Squad photo"],["Football","Midfield battle"],["Cricket","Trophy moment"],
+ ["Football","Tournament day"],["Volleyball","Block at the net"],["Football","Warm-up"],["Cricket","Bowling spell"],["Football","Practice match"],["Volleyball","Team photo"],
+ ["Football","Sideline support"],["Cricket","Team huddle"]
+];
+var HUES={Football:["#FFC62E","#E5202E"],Cricket:["#22C7B8","#8B5CF6"],Volleyball:["#8B5CF6","#E5202E"],Blood:["#E5202E","#6d0a14"],Distribution:["#22C7B8","#14591F"],Rally:["#FFC62E","#E5202E"],Ifthaar:["#8B5CF6","#22C7B8"],Screening:["#6EC1FF","#8B5CF6"],Workshop:["#FFC62E","#22C7B8"]};
+var GAL=GAL_RAW.map(function(g){return{s:g[0],c:g[1],src:""}});
+var SPAN=["big","","","tall","","wide","","","tall","","big","","","","wide","","tall","","",""];
+
+function $(s){return document.querySelector(s)}
+function fmt(d){var x=new Date(d+"T00:00:00");return{day:x.toLocaleDateString("en-GB",{day:"2-digit"}),mon:x.toLocaleDateString("en-GB",{month:"short"}),full:x.toLocaleDateString("en-GB",{day:"2-digit",month:"short",year:"numeric"})}}
+
+/* menu */
+$("#menuBtn").addEventListener("click",function(){var o=$("#nav").classList.toggle("open");this.setAttribute("aria-expanded",o)});
+document.querySelectorAll("#nav a").forEach(function(a){a.addEventListener("click",function(){$("#nav").classList.remove("open");$("#menuBtn").setAttribute("aria-expanded","false")})});
+
+/* glass light follows the pointer */
+document.addEventListener("pointermove",function(e){
+  var g=e.target.closest&&e.target.closest(".glass");if(!g)return;
+  var r=g.getBoundingClientRect();g.style.setProperty("--mx",(e.clientX-r.left)+"px");g.style.setProperty("--my",(e.clientY-r.top)+"px");
+});
+
+/* views: home page and the separate Join TFSC page */
+var VIEWS={"join-tfsc":"joinView","support-tfsc":"supportView"};
+function route(){
+  var h=location.hash.slice(1),view=VIEWS[h];
+  $("#mainView").hidden=!!view;
+  Object.keys(VIEWS).forEach(function(k){$("#"+VIEWS[k]).hidden=VIEWS[k]!==view});
+  if(view){window.scrollTo(0,0);setActive(null);return}
+  var el=h&&document.getElementById(h);
+  requestAnimationFrame(function(){if(el)el.scrollIntoView();else window.scrollTo(0,0)});
+}
+window.addEventListener("hashchange",route);
+
+/* leaders and coaches */
+function avatar(p,tag){
+  return '<div class="avwrap'+(tag?' tagged':'')+'"><div class="avatar">'+(p.src?'<img loading="lazy" src="'+p.src+'" alt="'+p.n+'">':'<svg class="i" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="16" r="8"/><path d="M8 42c0-9 7-15 16-15s16 6 16 15"/></svg>')+'</div>'+
+   (tag?'<span class="avtag"><img src="tfsc-logo.png" alt="" width="14" height="16">'+tag+'</span>':'')+'</div>';
+}
+$("#leaderList").innerHTML=LEADERS.map(function(p){return '<div class="person glass lift">'+avatar(p)+'<h4>'+p.n+'</h4><span class="role">'+p.r+'</span></div>'}).join("");
+var coachKeys=Object.keys(COACHES),coachTabs=$("#coachTabs");
+function showCoaches(key){
+  coachTabs.querySelectorAll(".chip").forEach(function(c){var on=c.dataset.k===key;c.setAttribute("aria-selected",on?"true":"false");c.tabIndex=on?0:-1});
+  var g=COACHES[key];$("#coachLead").textContent=g.lead;
+  $("#coachList").innerHTML=g.list.map(function(p){
+    var badge="";
+    if(key==="club")badge=p.lic?'<span class="lic ok"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg>Licensed · '+p.lic+'</span>':'<span class="lic">Licence details coming soon</span>';
+    return '<div class="person glass lift">'+avatar(p,key==="club"?"Ex-TFSC":"")+'<h4>'+p.n+'</h4><span class="role">'+p.r+'</span>'+badge+'</div>';
+  }).join("");
+}
+coachKeys.forEach(function(k,i){
+  var b=document.createElement("button");b.type="button";b.className="chip";b.setAttribute("role","tab");b.dataset.k=k;b.textContent=COACHES[k].tab;
+  b.addEventListener("click",function(){showCoaches(k)});
+  b.addEventListener("keydown",function(e){
+    var n=-1;if(e.key==="ArrowRight")n=(i+1)%coachKeys.length;if(e.key==="ArrowLeft")n=(i+coachKeys.length-1)%coachKeys.length;
+    if(n>=0){showCoaches(coachKeys[n]);coachTabs.children[n].focus();e.preventDefault()}
+  });
+  coachTabs.appendChild(b);
+});
+showCoaches(coachKeys[0]);
+
+/* sports and achievements */
+$("#footballCards").innerHTML='<div class="sport feat glass lift"><div class="ico">'+ico("Football")+'</div><div class="txt"><span class="pos" style="width:fit-content">Our sport</span><h3>Football</h3><p>'+FOOTBALL.intro+'</p></div></div>'+
+ FOOTBALL.items.map(function(s){return '<div class="sport glass lift"><h3>'+s.h+'</h3><span class="meta">'+s.t+'</span><p>'+s.d+'</p></div>'}).join("");
+$("#achCards").innerHTML=ACH.map(function(a){return '<div class="ach glass lift"><span class="yr">'+a.y+'</span><span class="pos">'+a.p+'</span><h4>'+a.t+'</h4><p>'+a.d+'</p></div>'}).join("");
+
+/* events and announcements */
+function dateBlock(d){var f=fmt(d);return '<div class="dt"><b>'+f.day+'</b><small>'+f.mon+'</small></div>'}
+var now=new Date(),today=now.getFullYear()+"-"+String(now.getMonth()+1).padStart(2,"0")+"-"+String(now.getDate()).padStart(2,"0");
+var upcoming=EV.filter(function(e){return e.d>=today}).sort(function(a,b){return a.d.localeCompare(b.d)});
+var evPhotos=upcoming.map(function(a){return{s:a.s,c:a.t+" · "+fmt(a.d).full,src:a.src}});
+$("#evGrid").innerHTML=upcoming.length?upcoming.map(function(a,i){
+  var f=fmt(a.d);
+  var inner=a.src?'<img class="pic" loading="lazy" src="'+a.src+'" alt="'+a.t+'">':'<span class="ph" style="background:'+tileBg(a.s)+'">'+ico(a.s)+'</span>';
+  return '<button type="button" class="tile evc" data-i="'+i+'" aria-label="Open '+a.t+', '+f.full+'">'+inner+'<span class="dtb"><b>'+f.day+'</b><small>'+f.mon+'</small></span>'+(i===0?'<span class="tag nx">Next up</span>':'')+'<span class="cap"><b>'+a.t+'</b><span>'+a.p+'</span></span></button>';
+}).join(""):'<p>New events will be announced soon.</p>';
+/* next event: one poster plus details */
+(function(){
+  var el=$("#nextCard");
+  if(!upcoming.length){el.innerHTML='<div class="nxinfo"><h3>New event coming soon</h3><p>Check back for the next announcement.</p></div>';return}
+  var a=upcoming[0],f=fmt(a.d);
+  var days=Math.round((new Date(a.d+"T00:00:00")-new Date(today+"T00:00:00"))/86400000);
+  var when=days===0?"Today":days===1?"Tomorrow":"In "+days+" days";
+  var inner=a.src?'<img src="'+a.src+'" alt="Poster for '+a.t+'">':'<span class="ph" style="background:'+tileBg(a.s)+'">'+ico(a.s)+'<span>Event poster</span></span>';
+  el.innerHTML='<button type="button" class="poster" id="posterBtn" aria-label="Open the poster for '+a.t+'">'+inner+'</button>'+
+   '<div class="nxinfo"><span class="live">Next event</span><h3>'+a.t+'</h3>'+
+   '<div class="nxfacts"><span>'+f.full+'</span><span class="gold">'+when+'</span><span>'+a.s+'</span></div>'+
+   '<p>'+a.p+'</p>'+
+   '<div class="row"><a class="btn red" href="#join-tfsc">Join TFSC</a><a class="btn" href="#events">All events</a></div></div>';
+  $("#posterBtn").addEventListener("click",function(){showLb(0,evPhotos);openDlg(lb)});
+})();
+$("#annList").innerHTML=ANN.map(function(a){return '<div class="item">'+dateBlock(a.d)+'<div><h4>'+a.t+'</h4><p>'+a.p+'</p></div></div>'}).join("");
+
+/* tournaments */
+$("#tourList").innerHTML=TOUR.map(function(t){return '<div class="trow glass lift"><div><h4>'+t.n+'</h4></div><div><small>Sport</small><span class="v">'+t.s+'</span></div><div><small>When and where</small><span class="v">'+t.d+' · '+t.v+'</span></div><span class="st '+t.c+'">'+t.st+'</span></div>'}).join("");
+$("#t-tour").innerHTML=TOUR.map(function(t){return '<option>'+t.n+' ('+t.d+')</option>'}).join("");
+
+/* gallery */
+var cur=[],lbList=[],idx=0,filter="All";
+function tileBg(s){var h=HUES[s];return "linear-gradient(145deg,"+h[0]+","+h[1]+")"}
+function renderGal(){
+  cur=GAL.filter(function(g){return filter==="All"||g.s===filter});
+  $("#gal").innerHTML=cur.map(function(g,i){
+    var inner=g.src?'<img class="pic" loading="lazy" src="'+g.src+'" alt="'+g.s+': '+g.c+'">':'<span class="ph" style="background:'+tileBg(g.s)+'">'+ico(g.s)+'</span>';
+    return '<button type="button" class="tile '+SPAN[i%SPAN.length]+'" data-i="'+i+'" aria-label="Open '+g.s+': '+g.c+'">'+inner+'<span class="cap"><i>'+g.s+'</i>'+g.c+'</span></button>';
+  }).join("");
+}
+var fl=["All"];GAL.forEach(function(g){if(fl.indexOf(g.s)<0)fl.push(g.s)});
+$("#galFilter").innerHTML=fl.map(function(f,i){return '<button type="button" class="chip" data-f="'+f+'" aria-pressed="'+(i===0)+'">'+f+'</button>'}).join("");
+$("#galFilter").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;filter=b.dataset.f;this.querySelectorAll("button").forEach(function(c){c.setAttribute("aria-pressed",c===b?"true":"false")});renderGal()});
+renderGal();
+var lb=$("#lb");
+function showLb(i,list){
+  if(list)lbList=list;
+  idx=(i+lbList.length)%lbList.length;var g=lbList[idx];
+  $("#lbImg").style.background=g.src?"#000":tileBg(g.s);
+  $("#lbImg").innerHTML=g.src?'<img src="'+g.src+'" alt="'+g.s+': '+g.c+'">':ico(g.s);
+  $("#lbCap").textContent=g.l||(g.s+" · "+g.c);
+}
+function openDlg(d){if(d.showModal)d.showModal();else d.setAttribute("open","")}
+function closeDlg(d){if(d.close)d.close();else d.removeAttribute("open")}
+$("#gal").addEventListener("click",function(e){var b=e.target.closest(".tile");if(!b)return;showLb(+b.dataset.i,cur);openDlg(lb)});
+$("#evGrid").addEventListener("click",function(e){var b=e.target.closest(".tile");if(!b)return;showLb(+b.dataset.i,evPhotos);openDlg(lb)});
+$("#lbPrev").addEventListener("click",function(){showLb(idx-1)});
+$("#lbNext").addEventListener("click",function(){showLb(idx+1)});
+$("#lbClose").addEventListener("click",function(){closeDlg(lb)});
+lb.addEventListener("click",function(e){if(e.target===lb)closeDlg(lb)});
+lb.addEventListener("keydown",function(e){if(e.key==="ArrowLeft")showLb(idx-1);if(e.key==="ArrowRight")showLb(idx+1)});
+
+/* other activities: slideshows */
+function slideList(a){return a.imgs.length?a.imgs:["","",""]}
+function slideBg(k,j){var h=HUES[k];return "linear-gradient("+(145+j*55)+"deg,"+h[0]+","+h[1]+")"}
+$("#actGrid").innerHTML=ACT.map(function(a,i){
+  var list=slideList(a),n=list.length,wide=i===ACT.length-1&&ACT.length%3===1;
+  var slides=list.map(function(src,j){
+    var inner=src?'<img loading="lazy" src="'+src+'" alt="'+a.t+', photo '+(j+1)+' of '+n+'">':'<span class="ph" style="background:'+slideBg(a.k,j)+'">'+ico(a.k)+'<span>Photo '+(j+1)+' of '+n+'</span></span>';
+    return '<button type="button" class="slide'+(j===0?' on':'')+'" aria-label="Open photo '+(j+1)+' of '+n+': '+a.t+'">'+inner+'</button>';
+  }).join("");
+  var nav=n>1?'<button type="button" class="ctl prev" aria-label="Previous photo">‹</button><button type="button" class="ctl next" aria-label="Next photo">›</button><div class="dots">'+list.map(function(_,j){return '<button type="button" aria-label="Go to photo '+(j+1)+'" aria-current="'+(j===0)+'"></button>'}).join("")+'</div>':'';
+  return '<article class="act glass'+(wide?' wide':'')+'" data-i="'+i+'"><div class="show'+(a.fit==="contain"?' contain':'')+'" role="group" aria-roledescription="carousel" aria-label="'+a.t+' photos">'+slides+nav+'</div><div class="actbody"><span class="pos" style="width:fit-content">'+a.tag+'</span><h4>'+a.t+'</h4></div></article>';
+}).join("");
+(function(){
+  var reduced=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+  document.querySelectorAll("#actGrid .show").forEach(function(el,idx){
+    var a=ACT[+el.closest(".act").dataset.i],list=slideList(a),n=list.length;
+    var slides=el.querySelectorAll(".slide"),dots=el.querySelectorAll(".dots button");
+    var cur=0,timer=null,paused=false,visible=true;
+    function go(i){
+      cur=(i+n)%n;
+      slides.forEach(function(s,j){var on=j===cur;s.classList.toggle("on",on);s.tabIndex=on?0:-1;s.setAttribute("aria-hidden",on?"false":"true")});
+      dots.forEach(function(d,j){d.setAttribute("aria-current",j===cur?"true":"false")});
+    }
+    function restart(){
+      clearInterval(timer);
+      if(reduced||n<2)return;
+      timer=setInterval(function(){if(!paused&&visible&&!document.hidden)go(cur+1)},4500+idx*350);
+    }
+    go(0);restart();
+    var prev=el.querySelector(".prev"),next=el.querySelector(".next");
+    if(prev)prev.addEventListener("click",function(){go(cur-1);restart()});
+    if(next)next.addEventListener("click",function(){go(cur+1);restart()});
+    dots.forEach(function(d,j){d.addEventListener("click",function(){go(j);restart()})});
+    el.addEventListener("mouseenter",function(){paused=true});
+    el.addEventListener("mouseleave",function(){paused=false});
+    el.addEventListener("focusin",function(){paused=true});
+    el.addEventListener("focusout",function(){paused=false});
+    var x0=null;
+    el.addEventListener("touchstart",function(e){x0=e.touches[0].clientX},{passive:true});
+    el.addEventListener("touchend",function(e){
+      if(x0===null)return;var dx=e.changedTouches[0].clientX-x0;x0=null;
+      if(Math.abs(dx)>40){go(cur+(dx<0?1:-1));restart()}
+    },{passive:true});
+    el.addEventListener("keydown",function(e){if(e.key==="ArrowLeft"){go(cur-1);restart()}if(e.key==="ArrowRight"){go(cur+1);restart()}});
+    slides.forEach(function(s){s.addEventListener("click",function(){
+      showLb(cur,list.map(function(src,j){return{s:a.k,c:a.t,l:a.t+" · "+(j+1)+" of "+n,src:src}}));openDlg(lb);
+    })});
+    if("IntersectionObserver" in window){new IntersectionObserver(function(es){visible=es[0].isIntersecting},{threshold:.2}).observe(el)}
+  });
+})();
+
+/* contact rows with copy buttons */
+function contactRows(target){
+  CONTACT.forEach(function(c){
+    var r=document.createElement("div");r.className="crow glass";
+    r.innerHTML='<div><small>'+c.k+'</small><span class="val">'+c.v+'</span></div>';
+    var b=document.createElement("button");b.type="button";b.className="copy";b.textContent="Copy";
+    b.addEventListener("click",function(){copyText(c.v,b,"Copy")});
+    r.appendChild(b);target.appendChild(r);
+  });
+}
+function copyText(text,btn,label){
+  var done=function(){btn.textContent="Copied";setTimeout(function(){btn.textContent=label},1500)};
+  var fail=function(){btn.textContent="Select and copy";setTimeout(function(){btn.textContent=label},2500)};
+  try{navigator.clipboard.writeText(text).then(done,fail)}catch(e){fail()}
+}
+contactRows($("#contactList"));
+
+/* forms: build a message the person sends to TFSC */
+function collect(form,title){
+  var out=[title],seen={};
+  Array.prototype.forEach.call(form.elements,function(el){
+    if(!el.name||seen[el.name])return;
+    if(el.type==="checkbox"){
+      seen[el.name]=1;
+      var vals=Array.prototype.map.call(form.querySelectorAll('input[name="'+el.name+'"]:checked'),function(x){return x.value});
+      if(vals.length)out.push(el.dataset.l+": "+vals.join(", "));return;
+    }
+    var v=(el.value||"").trim();if(v)out.push((el.dataset.l||el.name)+": "+v);
+  });
+  return out.join("\n");
+}
+function wireForm(formId,resId,errId,title,extra){
+  var form=$(formId),res=$(resId),err=$(errId),msg="";
+  form.addEventListener("submit",function(e){
+    e.preventDefault();err.textContent="";
+    if(!form.checkValidity()){form.reportValidity();return}
+    if(extra){var m=extra(form);if(m){err.textContent=m;return}}
+    msg=collect(form,title);
+    res.querySelector("pre").textContent=msg;
+    var wa=res.querySelector(".wa"),fb=res.querySelector(".fb");
+    if(CONFIG.whatsapp){wa.hidden=false;wa.href="https://wa.me/"+CONFIG.whatsapp+"?text="+encodeURIComponent(msg);fb.textContent="If WhatsApp does not open, copy the details and send them to the phone number or email in the contact section."}
+    else{wa.hidden=true;fb.textContent="Copy these details and send them to TFSC using the phone number or email in the contact section."}
+    res.hidden=false;res.scrollIntoView({block:"nearest",behavior:"smooth"});
+  });
+  var cp=res.querySelector(".cp");
+  cp.addEventListener("click",function(){copyText(msg,cp,"Copy details")});
+}
+wireForm("#joinForm","#j-res","#j-err","TFSC football join request");
+wireForm("#teamForm","#t-res","#t-err","TFSC tournament team entry");
+wireForm("#supForm","#s-res","#s-err","TFSC donation or sponsorship enquiry");
+
+/* active nav */
+var links={};document.querySelectorAll("#nav a").forEach(function(a){links[a.getAttribute("href").slice(1)]=a});
+function setActive(id){Object.keys(links).forEach(function(k){links[k].classList.toggle("active",k===id)})}
+if("IntersectionObserver" in window){
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)setActive(e.target.id)})},{rootMargin:"-40% 0px -55% 0px"});
+  Object.keys(links).forEach(function(id){var el=document.getElementById(id);if(el)io.observe(el)});
+}
+route();
+</script>
+
+</body>
+</html>
