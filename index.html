@@ -384,10 +384,10 @@ footer{padding-block:20px 40px}
     <div>
       <div class="eyebrow">A node of SIO · Students Islamic Organisation</div>
       <h1>Train hard. Play fair. <em>Rise</em> together.</h1>
-      <p class="sub">Track Force Sports Club is all about football. Train with us, play with us and grow with us.</p>
+      <p class="sub">Empowering students through sports, fitness, teamwork and discipline.</p>
       <div class="row"><a class="btn red" href="#join-tfsc">Join TFSC</a><a class="btn" href="#gallery">See our gallery</a></div>
     </div>
-    <div class="stage"><div class="orb glass"><img src="tfsc-logo.jpg" alt="TFSC Track Force Sports Club shield logo" width="414" height="471"></div></div>
+    <div class="stage"><div class="orb glass"><img src="images/logo.jpg" alt="TFSC Track Force Sports Club shield logo" width="414" height="471"></div></div>
   </div>
   <div class="lanes" aria-hidden="true"></div>
 </div></div>
@@ -601,7 +601,7 @@ footer{padding-block:20px 40px}
 
 <footer><div class="wrap">
   <div class="foot glass">
-    <a class="brand" href="#home"><img src="tfsc-logo.jpg" alt="TFSC logo" width="42" height="48"><span><b>TFSC</b><small>Track Force Sports Club</small></span></a>
+    <a class="brand" href="#home"><img src="images/logo.jpg" alt="TFSC logo" width="42" height="48"><span><b>TFSC</b><small>Track Force Sports Club</small></span></a>
     <ul><li><a href="#gallery">Gallery</a></li><li><a href="#tournaments">Tournaments</a></li><li><a href="#join-tfsc">Join TFSC</a></li><li><a class="gold" href="#support-tfsc">Support us</a></li></ul>
     <p class="fine">© 2026 Track Force Sports Club. A node of the Students Islamic Organisation (SIO).</p>
   </div>
@@ -737,7 +737,7 @@ window.addEventListener("hashchange",route);
 /* leaders and coaches */
 function avatar(p,tag){
   return '<div class="avwrap'+(tag?' tagged':'')+'"><div class="avatar">'+(p.src?'<img loading="lazy" src="'+p.src+'" alt="'+p.n+'">':'<svg class="i" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="16" r="8"/><path d="M8 42c0-9 7-15 16-15s16 6 16 15"/></svg>')+'</div>'+
-   (tag?'<span class="avtag"><img src="tfsc-logo.jpg" alt="" width="14" height="16">'+tag+'</span>':'')+'</div>';
+   (tag?'<span class="avtag"><img src="images/logo.jpg" alt="" width="14" height="16">'+tag+'</span>':'')+'</div>';
 }
 $("#leaderList").innerHTML=LEADERS.map(function(p){return '<div class="person glass lift">'+avatar(p)+'<h4>'+p.n+'</h4><span class="role">'+p.r+'</span></div>'}).join("");
 var coachKeys=Object.keys(COACHES),coachTabs=$("#coachTabs");
