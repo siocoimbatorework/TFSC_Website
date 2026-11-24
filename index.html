@@ -189,7 +189,7 @@ nav a.active{background:rgba(255,255,255,.2);box-shadow:inset 0 1px 0 rgba(255,2
 .lic{margin-top:10px;display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:99px;font-weight:800;font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--edge);background:rgba(255,255,255,.08);color:var(--muted)}
 .lic.ok{background:rgba(34,199,184,.18);border-color:rgba(34,199,184,.6);color:#8FF0E6}
 .lic svg{width:14px;height:14px;flex:none}
-.chip[aria-selected="true"]{background:linear-gradient(180deg,#ff5a66,#c4121f);border-color:rgba(255,160,166,.6);box-shadow:inset 0 1px 0 rgba(255,255,255,.5)}
+.chip[aria-selected="true"],.chip[aria-selected="true"]:hover{background:linear-gradient(180deg,#ff5a66,#c4121f);border-color:rgba(255,160,166,.6);box-shadow:inset 0 1px 0 rgba(255,255,255,.5)}
 .tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px}
 .tabs .chip{padding:11px 22px;font-size:.95rem}
 
@@ -669,7 +669,7 @@ var LEADERS=[
 /* Coaches. Set lic to the licence details, for example lic:"AFC C Licence", and src to a photo. */
 var COACHES={
  club:{tab:"TFSC coaches",lead:"Once TFSC players, now licensed coaches giving back to the club.",list:[
-  {n:"Coach name to be added",r:"Football coach",lic:"",src:""},
+  {n:"Coach name to be added",r:"Football coach",lic:"",src:"images/ARSATH.png"},
   {n:"Coach name to be added",r:"Football coach",lic:"",src:""},
   {n:"Coach name to be added",r:"Football coach",lic:"",src:""},
   {n:"Coach name to be added",r:"Football coach",lic:"",src:""},
@@ -693,6 +693,12 @@ var ACT=[
  {t:"Juniors World Cup screening",tag:"2026",k:"Screening",imgs:[]},
  {t:"Workshop for juniors",tag:"2025",k:"Workshop",imgs:[]}
 ];
+  
+COACHES.referee={tab:"Referee Examination",lead:"Referees who have cleared the referee examination.",list:[
+ {n:"Mohamed Rishadh A",r:"Referee",badge:"Referee Level 8",src:"images/rishad.png"},
+ {n:"Mohammed Sarjoon",r:"Referee",badge:"Referee Level 8",src:""}
+]};
+
 var CONTACT=[
  {k:"Phone / WhatsApp",v:"+91 00000 00000"},
  {k:"Email",v:"tfsc@example.com"},
@@ -747,6 +753,7 @@ function showCoaches(key){
   $("#coachList").innerHTML=g.list.map(function(p){
     var badge="";
     if(key==="club")badge=p.lic?'<span class="lic ok"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg>Licensed · '+p.lic+'</span>':'<span class="lic">Licence details coming soon</span>';
+    if(p.badge)badge='<span class="lic ok"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg>'+p.badge+'</span>';
     return '<div class="person glass lift">'+avatar(p,key==="club"?"Ex-TFSC":"")+'<h4>'+p.n+'</h4><span class="role">'+p.r+'</span>'+badge+'</div>';
   }).join("");
 }
