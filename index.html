@@ -951,7 +951,7 @@ document.querySelectorAll("#majors .major").forEach(function(card){
     tabs.forEach(function(c,j){c.setAttribute("aria-selected",j===i?"true":"false");c.tabIndex=j===i?0:-1});
     var y=m.years[i],imgs=y.imgs||[];
     var poster=imgs.length?'<img loading="lazy" src="'+imgs[0]+'" alt="'+m.name+' '+y.y+'">':'<span class="ph" style="background:linear-gradient(145deg,#FFC62E,#E5202E)">'+TROPHY+'<span>Photo to be added</span></span>';
-    var rows=[["Winner",y.winner],["Runner-up",y.runner],["Venue",y.venue],["Teams",y.teams].map(function(r){return '<div><dt>'+r[0]+'</dt><dd>'+tba(r[1])+'</dd></div>'}).join("");
+    var rows=[["Winner",y.winner],["Runner-up",y.runner],["Venue",y.venue],["Teams",y.teams]].map(function(r){return '<div><dt>'+r[0]+'</dt><dd>'+tba(r[1])+'</dd></div>'}).join("");
     body.innerHTML='<button type="button" class="mposter" aria-label="Open photos of '+m.name+' '+y.y+'">'+poster+(imgs.length>1?'<span class="cnt">'+imgs.length+' photos</span>':'')+'</button><div class="minfo"><span class="yr">'+y.y+'</span><dl class="facts">'+rows+'</dl></div>';
     body.querySelector(".mposter").addEventListener("click",function(){
       var list=imgs.length?imgs.map(function(src,k){return{s:"Football",c:m.name,l:m.name+" "+y.y+" · "+(k+1)+" of "+imgs.length,src:src}}):[{s:"Football",c:m.name,l:m.name+" "+y.y,src:""}];
