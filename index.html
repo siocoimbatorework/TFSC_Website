@@ -157,7 +157,7 @@ nav a.active{background:rgba(255,255,255,.2);box-shadow:inset 0 1px 0 rgba(255,2
 .mhead>div:last-child{min-width:0}
 .mhead h3{font-size:2.4rem;line-height:1;overflow-wrap:anywhere}
 .mcount{color:var(--muted);font-weight:600;font-size:.9rem}
-.mbody{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:22px;align-items:center}
+.mbody{display:grid;grid-template-columns:minmax(0,400px) minmax(0,1fr);gap:26px;align-items:center}
 .mposter{position:relative;display:block;width:100%;aspect-ratio:4/3;padding:0;border-radius:22px;overflow:hidden;border:1px solid var(--edge);cursor:pointer;color:#fff;font:inherit;box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 14px 34px rgba(0,0,0,.4)}
 .mposter img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
 .mposter .ph{position:absolute;inset:0;display:grid;place-items:center;align-content:center;gap:12px}
@@ -475,10 +475,10 @@ footer{padding-block:20px 40px}
 </div></section>
 
 <section id="events"><div class="wrap">
-  <div class="eyebrow">Major events</div><h2>Our events</h2>
+  <div class="head"><div class="eyebrow">Major events</div><h2>Our events</h2>
   <p class="lead">Our two major events, with year-by-year details. Choose a year to see what happened.</p></div>
   <div class="majors" id="majors"></div><div id="evGrid" hidden></div>
-  <p class="note">Sample events. Replace them with real ones and add a poster or photo for each.</p>
+  <p class="note">Sample year details. Replace them with the real winners, scores, venues and photos.</p>
 </div></section>
 
 <section id="football"><div class="wrap">
@@ -951,7 +951,7 @@ document.querySelectorAll("#majors .major").forEach(function(card){
     tabs.forEach(function(c,j){c.setAttribute("aria-selected",j===i?"true":"false");c.tabIndex=j===i?0:-1});
     var y=m.years[i],imgs=y.imgs||[];
     var poster=imgs.length?'<img loading="lazy" src="'+imgs[0]+'" alt="'+m.name+' '+y.y+'">':'<span class="ph" style="background:linear-gradient(145deg,#FFC62E,#E5202E)">'+TROPHY+'<span>Photo to be added</span></span>';
-    var rows=[["Winner",y.winner],["Runner-up",y.runner],["Venue",y.venue],["Teams",y.teams],["Highlights",y.note]].map(function(r){return '<div><dt>'+r[0]+'</dt><dd>'+tba(r[1])+'</dd></div>'}).join("");
+    var rows=[["Winner",y.winner],["Runner-up",y.runner],["Venue",y.venue],["Teams",y.teams].map(function(r){return '<div><dt>'+r[0]+'</dt><dd>'+tba(r[1])+'</dd></div>'}).join("");
     body.innerHTML='<button type="button" class="mposter" aria-label="Open photos of '+m.name+' '+y.y+'">'+poster+(imgs.length>1?'<span class="cnt">'+imgs.length+' photos</span>':'')+'</button><div class="minfo"><span class="yr">'+y.y+'</span><dl class="facts">'+rows+'</dl></div>';
     body.querySelector(".mposter").addEventListener("click",function(){
       var list=imgs.length?imgs.map(function(src,k){return{s:"Football",c:m.name,l:m.name+" "+y.y+" · "+(k+1)+" of "+imgs.length,src:src}}):[{s:"Football",c:m.name,l:m.name+" "+y.y,src:""}];
