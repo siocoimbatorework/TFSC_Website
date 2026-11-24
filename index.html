@@ -143,7 +143,43 @@ nav a.active{background:rgba(255,255,255,.2);box-shadow:inset 0 1px 0 rgba(255,2
 .nxfacts span.gold{color:var(--gold)}
 @media(max-width:820px){.next{grid-template-columns:1fr}.poster{aspect-ratio:4/5;max-height:70vh}.nxinfo{padding:26px}}
 
+
+
+  
+
+/* major events: year-wise */
+.majors{display:grid;gap:22px}
+.major{--r:30px;padding:28px;display:grid;grid-template-columns:minmax(0,1fr);gap:18px}
+.major .tabs{margin:0}
+.mhead{display:flex;align-items:center;gap:16px}
+.mico{flex:none;width:64px;height:64px;border-radius:20px;display:grid;place-items:center;background:linear-gradient(145deg,rgba(255,198,46,.3),rgba(229,32,46,.3));border:1px solid var(--edge);box-shadow:inset 0 1px 0 rgba(255,255,255,.4)}
+.mico svg{width:36px;height:36px;color:#fff}
+.mhead>div:last-child{min-width:0}
+.mhead h3{font-size:2.4rem;line-height:1;overflow-wrap:anywhere}
+.mcount{color:var(--muted);font-weight:600;font-size:.9rem}
+.mbody{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:22px;align-items:center}
+.mposter{position:relative;display:block;width:100%;aspect-ratio:4/3;padding:0;border-radius:22px;overflow:hidden;border:1px solid var(--edge);cursor:pointer;color:#fff;font:inherit;box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 14px 34px rgba(0,0,0,.4)}
+.mposter img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.mposter .ph{position:absolute;inset:0;display:grid;place-items:center;align-content:center;gap:12px}
+.mposter .ph::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(115deg,rgba(255,255,255,.1) 0 2px,transparent 2px 22px)}
+.mposter .ph svg{width:26%;max-width:110px;opacity:.55;position:relative;color:#fff}
+.mposter .ph span,.mposter .cnt{position:relative;padding:6px 14px;border-radius:99px;background:rgba(10,10,14,.45);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.25);font-weight:800;font-size:.74rem;letter-spacing:.1em;text-transform:uppercase}
+.mposter .cnt{position:absolute;right:12px;top:12px}
+.minfo{display:grid;gap:6px;align-content:center;min-width:0}
+.minfo .yr{font-family:var(--font-display);font-weight:900;font-size:4rem;line-height:.9;background:linear-gradient(180deg,var(--gold),var(--red-hot));-webkit-background-clip:text;background-clip:text;color:transparent}
+.tba{color:var(--muted);font-weight:600}
+.facts{display:grid;margin:0}
+.facts div{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:11px 0;border-bottom:1px solid rgba(255,255,255,.12)}
+.facts div:last-child{border-bottom:0}
+.facts dt{color:var(--muted);font-weight:700;font-size:.9rem}
+.facts dd{margin:0;font-weight:800;text-align:right;min-width:0;overflow-wrap:anywhere}
+@media(max-width:760px){.mbody{grid-template-columns:minmax(0,1fr)}.major{padding:20px}.mhead h3{font-size:1.7rem}.mico{width:52px;height:52px}}
+
 /* event photo cards */
+
+
+
+  
 .evgrid{display:grid;gap:14px;grid-template-columns:repeat(3,1fr);grid-auto-rows:210px;grid-auto-flow:dense;margin-bottom:26px}
 .evc.first{grid-column:span 2;grid-row:span 2}
 @media(min-width:901px){.evc:nth-child(4):last-child{grid-column:span 3}}
@@ -439,9 +475,9 @@ footer{padding-block:20px 40px}
 </div></section>
 
 <section id="events"><div class="wrap">
-  <div class="head"><div class="eyebrow">Events</div><h2>Upcoming events</h2>
-  <p class="lead">Everything coming up at TFSC. Tap a photo to open it.</p></div>
-  <div class="evgrid" id="evGrid"></div>
+  <div class="eyebrow">Major events</div><h2>Our events</h2>
+  <p class="lead">Our two major events, with year-by-year details. Choose a year to see what happened.</p></div>
+  <div class="majors" id="majors"></div><div id="evGrid" hidden></div>
   <p class="note">Sample events. Replace them with real ones and add a poster or photo for each.</p>
 </div></section>
 
@@ -699,6 +735,21 @@ COACHES.referee={tab:"AIFF-Licensed Referees",lead:"Referees who have cleared th
  {n:"Mohammed Sarjoon",r:"Referee",badge:"Referee Level 8",src:""}
 ]};
 
+/* Major events, year by year. Add photos with imgs, for example imgs:["photos/bt2025-1.jpg","photos/bt2025-2.jpg"]. */
+var MAJORS=[
+ {name:"Brotherhood Trophy",years:[
+  {y:"2025",winner:"",runner:"",venue:"",teams:"",note:"",imgs:[]},
+  {y:"2024",winner:"",runner:"",venue:"",teams:"",note:"",imgs:[]},
+  {y:"2023",winner:"",runner:"",venue:"",teams:"",note:"",imgs:[]},
+  {y:"2022",winner:"",runner:"",venue:"",teams:"",note:"",imgs:[]}
+ ]},
+ {name:"Abled Kovil Trophy",years:[
+  {y:"2025",winner:"",runner:"",venue:"",teams:"",note:"",imgs:[]},
+  {y:"2024",winner:"",runner:"",venue:"",teams:"",note:"",imgs:[]},
+  {y:"2023",winner:"",runner:"",venue:"",teams:"",note:"",imgs:[]}
+ ]}
+];
+  
 var CONTACT=[
  {k:"Phone / WhatsApp",v:"+91 00000 00000"},
  {k:"Email",v:"tfsc@example.com"},
@@ -887,7 +938,40 @@ $("#actGrid").innerHTML=ACT.map(function(a,i){
   });
 })();
 
+/* major events: year-wise */
+var TROPHY='<svg class="i" viewBox="0 0 48 48" aria-hidden="true"><path d="M14 8h20v10a10 10 0 0 1-20 0zM14 12H7v3a7 7 0 0 0 7 7M34 12h7v3a7 7 0 0 1-7 7M24 28v8M16 40h16"/></svg>';
+function tba(v){return v?v:'<span class="tba">To be added</span>'}
+$("#majors").innerHTML=MAJORS.map(function(m,mi){
+  var chips=m.years.map(function(y,i){return '<button type="button" class="chip" role="tab" data-i="'+i+'">'+y.y+'</button>'}).join("");
+  return '<article class="major glass" data-m="'+mi+'"><div class="mhead"><div class="mico">'+TROPHY+'</div><div><span class="role">Major event</span><h3>'+m.name+'</h3><p class="mcount">'+m.years.length+' editions</p></div></div><div class="tabs" role="tablist" aria-label="'+m.name+' years">'+chips+'</div><div class="mbody" role="tabpanel"></div></article>';
+}).join("");
+document.querySelectorAll("#majors .major").forEach(function(card){
+  var m=MAJORS[+card.dataset.m],tabs=card.querySelectorAll(".chip"),body=card.querySelector(".mbody");
+  function show(i){
+    tabs.forEach(function(c,j){c.setAttribute("aria-selected",j===i?"true":"false");c.tabIndex=j===i?0:-1});
+    var y=m.years[i],imgs=y.imgs||[];
+    var poster=imgs.length?'<img loading="lazy" src="'+imgs[0]+'" alt="'+m.name+' '+y.y+'">':'<span class="ph" style="background:linear-gradient(145deg,#FFC62E,#E5202E)">'+TROPHY+'<span>Photo to be added</span></span>';
+    var rows=[["Winner",y.winner],["Runner-up",y.runner],["Venue",y.venue],["Teams",y.teams],["Highlights",y.note]].map(function(r){return '<div><dt>'+r[0]+'</dt><dd>'+tba(r[1])+'</dd></div>'}).join("");
+    body.innerHTML='<button type="button" class="mposter" aria-label="Open photos of '+m.name+' '+y.y+'">'+poster+(imgs.length>1?'<span class="cnt">'+imgs.length+' photos</span>':'')+'</button><div class="minfo"><span class="yr">'+y.y+'</span><dl class="facts">'+rows+'</dl></div>';
+    body.querySelector(".mposter").addEventListener("click",function(){
+      var list=imgs.length?imgs.map(function(src,k){return{s:"Football",c:m.name,l:m.name+" "+y.y+" · "+(k+1)+" of "+imgs.length,src:src}}):[{s:"Football",c:m.name,l:m.name+" "+y.y,src:""}];
+      showLb(0,list);openDlg(lb);
+    });
+  }
+  tabs.forEach(function(c,i){
+    c.addEventListener("click",function(){show(i)});
+    c.addEventListener("keydown",function(e){
+      var n=-1;if(e.key==="ArrowRight")n=(i+1)%tabs.length;if(e.key==="ArrowLeft")n=(i+tabs.length-1)%tabs.length;
+      if(n>=0){show(n);tabs[n].focus();e.preventDefault()}
+    });
+  });
+  show(0);
+});
+
 /* contact rows with copy buttons */
+
+
+  
 function contactRows(target){
   CONTACT.forEach(function(c){
     var r=document.createElement("div");r.className="crow glass";
