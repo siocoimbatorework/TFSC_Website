@@ -763,7 +763,12 @@ var GAL_RAW=[
  ["Football","Sideline support"],["Cricket","Team huddle"]
 ];
 var HUES={Football:["#FFC62E","#E5202E"],Cricket:["#22C7B8","#8B5CF6"],Volleyball:["#8B5CF6","#E5202E"],Blood:["#E5202E","#6d0a14"],Distribution:["#22C7B8","#14591F"],Rally:["#FFC62E","#E5202E"],Ifthaar:["#8B5CF6","#22C7B8"],Screening:["#6EC1FF","#8B5CF6"],Workshop:["#FFC62E","#22C7B8"]};
+  
 var GAL=GAL_RAW.map(function(g){return{s:g[0],c:g[1],src:""}});
+/* GALLERY PHOTOS: put photos in images/gallery/ and list the file names here, e.g. var GAL_PHOTOS=["m1.jpg","m2.jpg",["m3.jpg","Penalty kick"]]; */
+var GAL_PHOTOS=["gal1.png","gal2.png","gal3.png","gal4.png","gal5.png","gal6.png","gal7.png","gal8.png","gal9.png","gal10.png","gal11.png","gal12.png","gal13.png"];
+if(GAL_PHOTOS.length)GAL=GAL_PHOTOS.map(function(p){var a=[].concat(p);return{s:"Football",c:a[1]||"",l:a[1]||"TFSC football",src:"images/gallery/"+a[0]}});
+  
 var SPAN=["big","","","tall","","wide","","","tall","","big","","","","wide","","tall","","",""];
 
 function $(s){return document.querySelector(s)}
@@ -862,7 +867,7 @@ function renderGal(){
   cur=GAL.filter(function(g){return filter==="All"||g.s===filter});
   $("#gal").innerHTML=cur.map(function(g,i){
     var inner=g.src?'<img class="pic" loading="lazy" src="'+g.src+'" alt="'+g.s+': '+g.c+'">':'<span class="ph" style="background:'+tileBg(g.s)+'">'+ico(g.s)+'</span>';
-    return '<button type="button" class="tile '+SPAN[i%SPAN.length]+'" data-i="'+i+'" aria-label="Open '+g.s+': '+g.c+'">'+inner+'<span class="cap"><i>'+g.s+'</i>'+g.c+'</span></button>';
+    return '<button type="button" class="tile '+SPAN[i%SPAN.length]+'" data-i="'+i+'" aria-label="Open '+g.s+': '+g.c+'">'+inner+(g.c?'<span class="cap"><i>'+g.s+'</i>'+g.c+'</span>':'')+'</button>';
   }).join("");
 }
 var fl=["All"];GAL.forEach(function(g){if(fl.indexOf(g.s)<0)fl.push(g.s)});
