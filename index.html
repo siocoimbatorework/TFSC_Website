@@ -219,6 +219,11 @@ nav a.active{background:rgba(255,255,255,.2);box-shadow:inset 0 1px 0 rgba(255,2
 .avtag{position:absolute;left:50%;bottom:-14px;transform:translateX(-50%);width:max-content;display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:6px 14px 6px 10px;line-height:1;border-radius:99px;white-space:nowrap;font-weight:800;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--text);background:rgba(14,15,22,.62);-webkit-backdrop-filter:blur(14px) saturate(160%);backdrop-filter:blur(14px) saturate(160%);border:1px solid rgba(255,198,46,.6);box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 8px 18px rgba(0,0,0,.4)}
 .avtag img{height:16px;width:auto;max-width:none;flex:none;display:block}
 .avatar img{width:100%;height:100%;object-fit:cover;display:block}
+.campinfo{padding:26px 28px;margin-bottom:18px;max-width:880px}
+.campinfo h3{font-size:2rem;margin-bottom:8px}
+.campinfo p{color:var(--muted);line-height:1.7;white-space:pre-line}
+.campgal{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.campgal .tile{aspect-ratio:4/3}
 .avatar svg{width:58%;height:58%;color:rgba(255,255,255,.78)}
 .person h4{font-size:1.7rem}
 .role{color:var(--gold);font-weight:800;letter-spacing:.1em;text-transform:uppercase;font-size:.78rem}
@@ -475,10 +480,17 @@ footer{padding-block:20px 40px}
 </div></section>
 
 <section id="events"><div class="wrap">
-  <div class="head"><div class="eyebrow">Major events</div><h2>Our events</h2>
-  <p class="lead">Our two major events, with year-by-year details. Choose a year to see what happened.</p></div>
-  <div class="majors" id="majors"></div><div id="evGrid" hidden></div>
-  <p class="note">Sample year details. Replace them with the real winners, scores, venues and photos.</p>
+  <div class="head"><div class="eyebrow">Events &amp; camps</div><h2>Our events</h2>
+  <p class="lead">Our annual events, plus our summer and winter camps.</p></div>
+  <div class="tabs" id="evTabs" role="tablist" aria-label="Event types">
+    <button type="button" class="chip" role="tab" data-p="evAnnual" aria-selected="true">Annual events</button>
+    <button type="button" class="chip" role="tab" data-p="evSummer" aria-selected="false">Summer camp</button>
+    <button type="button" class="chip" role="tab" data-p="evWinter" aria-selected="false">Winter camp</button>
+  </div>
+  <div id="evAnnual" class="evpanel"><div class="majors" id="majors"></div><div id="evGrid" hidden></div>
+  <p class="note">Sample year details. Replace them with the real winners, scores, venues and photos.</p></div>
+  <div id="evSummer" class="evpanel" hidden></div>
+  <div id="evWinter" class="evpanel" hidden></div>
 </div></section>
 
 <section id="football"><div class="wrap">
@@ -874,7 +886,26 @@ var fl=["All"];GAL.forEach(function(g){if(fl.indexOf(g.s)<0)fl.push(g.s)});
 $("#galFilter").innerHTML=fl.map(function(f,i){return '<button type="button" class="chip" data-f="'+f+'" aria-pressed="'+(i===0)+'">'+f+'</button>'}).join("");
 $("#galFilter").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;filter=b.dataset.f;this.querySelectorAll("button").forEach(function(c){c.setAttribute("aria-pressed",c===b?"true":"false")});renderGal()});
 renderGal();
+  
 var lb=$("#lb");
+var CAMPS={
+ evSummer:{name:"Summer camp",text:"Camp details to be added.",imgs:[]},
+ evWinter:{name:"Winter camp",text:"Camp details to be added.",imgs:[]}
+};
+Object.keys(CAMPS).forEach(function(id){
+  var c=CAMPS[id],list=c.imgs.map(function(f){return{s:"Football",c:c.name,l:c.name,src:"images/camps/"+f}});
+  var tiles=(c.imgs.length?c.imgs:[0,1,2,3,4,5]).map(function(f,i){
+    return '<button type="button" class="tile" data-i="'+i+'" aria-label="Open '+c.name+' photo '+(i+1)+'">'+(c.imgs.length?'<img class="pic" loading="lazy" src="images/camps/'+f+'" alt="'+c.name+'">':'<span class="ph" style="background:'+tileBg("Football")+'">'+ico("Football")+'</span>')+'</button>';
+  }).join("");
+  $("#"+id).innerHTML='<div class="campinfo glass"><h3>'+c.name+'</h3><p>'+c.text+'</p></div><div class="campgal">'+tiles+'</div>'+(c.imgs.length?'':'<p class="note">Placeholder tiles. Add photos to replace them.</p>');
+  $("#"+id).querySelector(".campgal").addEventListener("click",function(e){var b=e.target.closest(".tile");if(!b||!list.length)return;showLb(+b.dataset.i,list);openDlg(lb)});
+});
+$("#evTabs").addEventListener("click",function(e){
+  var b=e.target.closest("button");if(!b)return;
+  this.querySelectorAll("button").forEach(function(x){x.setAttribute("aria-selected",x===b?"true":"false")});
+  document.querySelectorAll(".evpanel").forEach(function(p){p.hidden=p.id!==b.dataset.p});
+});
+  
 function showLb(i,list){
   if(list)lbList=list;
   idx=(i+lbList.length)%lbList.length;var g=lbList[idx];
