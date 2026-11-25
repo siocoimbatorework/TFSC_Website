@@ -978,6 +978,19 @@ $("#actGrid").innerHTML=ACT.map(function(a,i){
 /* major events: year-wise */
 var TROPHY='<svg class="i" viewBox="0 0 48 48" aria-hidden="true"><path d="M14 8h20v10a10 10 0 0 1-20 0zM14 12H7v3a7 7 0 0 0 7 7M34 12h7v3a7 7 0 0 1-7 7M24 28v8M16 40h16"/></svg>';
 function tba(v){return v?v:'<span class="tba">To be added</span>'}
+/* Event descriptions: paste the text between the quotes. Photos load by file name: images/events/brotherhood-2025-1.png, brotherhood-2025-2.png ... abled-2025-1.png ... */
+var MDESC={"Brotherhood Trophy":"","Abled Kovil Trophy":""};
+var PICS={};
+function findPics(name,year,cb){
+  var slug=name.toLowerCase().split(" ")[0],exts=["png","jpg","jpeg","webp"],out=[];
+  function tryExt(n,k){
+    var src="images/events/"+slug+"-"+year+"-"+n+"."+exts[k],im=new Image();
+    im.onload=function(){out.push(src);tryExt(n+1,0)};
+    im.onerror=function(){if(k+1<exts.length)tryExt(n,k+1);else cb(out)};
+    im.src=src;
+  }
+  tryExt(1,0);
+}
 $("#majors").innerHTML=MAJORS.map(function(m,mi){
   var chips=m.years.map(function(y,i){return '<button type="button" class="chip" role="tab" data-i="'+i+'">'+y.y+'</button>'}).join("");
   return '<article class="major glass" data-m="'+mi+'"><div class="mhead"><div class="mico">'+TROPHY+'</div><div><span class="role">Major event</span><h3>'+m.name+'</h3><p class="mcount">'+m.years.length+' editions</p></div></div><div class="tabs" role="tablist" aria-label="'+m.name+' years">'+chips+'</div><div class="mbody" role="tabpanel"></div></article>';
@@ -987,9 +1000,9 @@ document.querySelectorAll("#majors .major").forEach(function(card){
   function show(i){
     tabs.forEach(function(c,j){c.setAttribute("aria-selected",j===i?"true":"false");c.tabIndex=j===i?0:-1});
     var y=m.years[i],imgs=y.imgs||[];
-    imgs=imgs.map(function(f){return "images/events/"+f});var poster="";
+    var key=m.name+y.y;imgs=PICS[key]||[];var poster="";if(PICS[key]===undefined){PICS[key]=null;findPics(m.name,y.y,function(l){PICS[key]=l;if(tabs[i].getAttribute("aria-selected")==="true")show(i)})}
     var rows=[["Winner",y.winner],["Runner-up",y.runner],["Venue",y.venue],["Teams",y.teams]].map(function(r){return '<div><dt>'+r[0]+'</dt><dd>'+tba(r[1])+'</dd></div>'}).join("");
-    body.innerHTML='<div class="campgal">'+(imgs.length?imgs:[0,1,2,3]).map(function(f,i){return '<button type="button" class="tile" data-i="'+i+'" aria-label="Open photo '+(i+1)+'">'+(imgs.length?'<img class="pic" loading="lazy" src="'+f+'" alt="'+m.name+' '+y.y+'">':'<span class="ph" style="background:linear-gradient(145deg,#FFC62E,#E5202E)">'+TROPHY+'</span>')+'</button>'}).join("")+'</div><p class="mdesc">'+(y.note||"Event details to be added.")+'</p>';
+    body.innerHTML='<div class="campgal">'+(imgs.length?imgs:[0,1,2,3]).map(function(f,i){return '<button type="button" class="tile" data-i="'+i+'" aria-label="Open photo '+(i+1)+'">'+(imgs.length?'<img class="pic" loading="lazy" src="'+f+'" alt="'+m.name+' '+y.y+'">':'<span class="ph" style="background:linear-gradient(145deg,#FFC62E,#E5202E)">'+TROPHY+'</span>')+'</button>'}).join("")+'</div><p class="mdesc">'+(MDESC[m.name]||"Event details to be added.")+'</p>';
     body.querySelector(".campgal").addEventListener("click",function(e){var t=e.target.closest(".tile");if(!t)return;
       var list=imgs.length?imgs.map(function(src,k){return{s:"Football",c:m.name,l:m.name+" "+y.y+" · "+(k+1)+" of "+imgs.length,src:src}}):[{s:"Football",c:m.name,l:m.name+" "+y.y,src:""}];
       showLb(+t.dataset.i,list);openDlg(lb);
