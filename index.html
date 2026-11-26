@@ -437,7 +437,6 @@ footer{padding-block:20px 40px}
 <section id="next" style="padding-top:36px"><div class="wrap">
   <div class="head"><div class="eyebrow">Upcoming</div><h2>Do not miss it</h2></div>
   <div class="next glass" id="nextCard"></div>
-  <p class="note">Sample event. Add the real event poster and details.</p>
 </div></section>
 
 <section id="about"><div class="wrap">
@@ -455,7 +454,6 @@ footer{padding-block:20px 40px}
 <section id="leaders" style="padding-top:20px"><div class="wrap">
   <div class="head"><div class="eyebrow">Leadership</div><h2>Our leaders</h2></div>
   <div class="people" id="leaderList"></div>
-  <p class="note">Placeholder avatars. Add each leader's photo to replace them.</p>
 </div></section>
 
 <section id="coaches"><div class="wrap">
@@ -463,7 +461,6 @@ footer{padding-block:20px 40px}
   <p class="lead" id="coachLead"></p></div>
   <div class="tabs" role="tablist" aria-label="Coach groups" id="coachTabs"></div>
   <div class="people" id="coachList" role="tabpanel"></div>
-  <p class="note">Placeholder names and avatars. Add real names, photos and licence details when you have them.</p>
 </div></section>
 
 <section id="gallery"><div class="wrap">
@@ -471,13 +468,11 @@ footer{padding-block:20px 40px}
   <p class="lead">Match days, training and tournament moments. Tap any tile to open it.</p></div>
   <div class="chips" id="galFilter" hidden></div>
   <div class="gal" id="gal"></div>
-  <p class="note">These tiles are placeholders. Real photos will replace them.</p>
 </div></section>
 
 <section id="announcements"><div class="wrap">
   <div class="head"><div class="eyebrow">News</div><h2>Announcements</h2></div>
   <div class="panel glass"><div class="annrow" id="annList"></div></div>
-  <p class="note">Sample announcements. Replace them with real ones.</p>
 </div></section>
 
 <section id="events"><div class="wrap">
@@ -489,7 +484,7 @@ footer{padding-block:20px 40px}
     <button type="button" class="chip" role="tab" data-p="evWinter" aria-selected="false">Winter camp</button>
   </div>
   <div id="evAnnual" class="evpanel"><div class="majors" id="majors"></div><div id="evGrid" hidden></div>
-  <p class="note">Sample year details. Replace them with the real winners, scores, venues and photos.</p></div>
+  <p class="note"> </p></div>
   <div id="evSummer" class="evpanel" hidden></div>
   <div id="evWinter" class="evpanel" hidden></div>
 </div></section>
@@ -497,20 +492,17 @@ footer{padding-block:20px 40px}
 <section id="football"><div class="wrap">
   <div class="head"><div class="eyebrow">Football</div><h2>Our game</h2></div>
   <div class="cards" id="footballCards"></div>
-  <p class="note">Sample timings. Replace them with TFSC's real schedule.</p>
 </div></section>
 
 <section id="achievements"><div class="wrap">
   <div class="head"><div class="eyebrow">Achievements</div><h2>Proud moments</h2></div>
   <div class="cards" id="achCards"></div>
-  <p class="note">Sample achievements. Replace them with TFSC's real record.</p>
 </div></section>
 
 <section id="activities"><div class="wrap">
   <div class="head"><div class="eyebrow">Beyond football</div><h2>Other activities</h2>
   <p class="lead">We serve the community and bring people together off the pitch too. Tap a photo to see it larger.</p></div>
   <div class="acts" id="actGrid"></div>
-  <p class="note">Placeholder slides. Add the real photos to each activity, and the brochure pages for blood donation and clothes and food distribution.</p>
 </div></section>
 
 <section id="tournaments"><div class="wrap">
@@ -548,14 +540,12 @@ footer{padding-block:20px 40px}
       </div>
     </div>
   </div>
-  <p class="note">Sample tournament name and sport. Replace them with the real details.</p>
 </div></section>
 
 <section id="contact"><div class="wrap">
   <div class="head"><div class="eyebrow">Contact us</div><h2>Get in touch</h2>
   <p class="lead">Questions about training, events or tournaments? Reach out.</p></div>
   <div class="clist" id="contactList"></div>
-  <p class="note">Placeholder details. Replace them with TFSC's real phone, email and social handles.</p>
 </div></section>
 </div>
 
@@ -621,7 +611,7 @@ footer{padding-block:20px 40px}
           <label>Company or organisation<input id="s-org" name="org" data-l="Organisation" autocomplete="organization"></label>
         </div>
         <label class="req">How would you like to help<select id="s-type" name="type" data-l="Support type" required><option value="">Choose</option><option>Make a donation</option><option>Sponsor a team</option><option>Sponsor a tournament</option><option>Give kit or equipment</option><option>Something else</option></select></label>
-        <label>Amount or details<input id="s-amt" name="amt" data-l="Amount or details" placeholder="For example: an amount, or what you would like to give"></label>
+        <label>Amount or details<input id="s-amt" name="amt" data-l="Amount or details"></label>
         <label>Message<textarea id="s-msg" name="msg" data-l="Message"></textarea></label>
         <div class="err" id="s-err" role="alert"></div>
         <button class="btn red" type="submit">Prepare my message</button>
@@ -897,7 +887,7 @@ Object.keys(CAMPS).forEach(function(id){
   var tiles=(c.imgs.length?c.imgs:[0,1,2,3,4,5]).map(function(f,i){
     return '<button type="button" class="tile" data-i="'+i+'" aria-label="Open '+c.name+' photo '+(i+1)+'">'+(c.imgs.length?'<img class="pic" loading="lazy" src="images/camps/'+f+'" alt="'+c.name+'">':'<span class="ph" style="background:'+tileBg("Football")+'">'+ico("Football")+'</span>')+'</button>';
   }).join("");
-  $("#"+id).innerHTML='<div class="campinfo glass"><h3>'+c.name+'</h3><p>'+c.text+'</p></div><div class="campgal">'+tiles+'</div>'+(c.imgs.length?'':'<p class="note">Placeholder tiles. Add photos to replace them.</p>');
+  $("#"+id).innerHTML='<div class="campinfo glass"><h3>'+c.name+'</h3><p>'+c.text+'</p></div><div class="campgal">'+tiles+'</div>'+(c.imgs.length?'':'<p class="note"> </p>');
   $("#"+id).querySelector(".campgal").addEventListener("click",function(e){var b=e.target.closest(".tile");if(!b||!list.length)return;showLb(+b.dataset.i,list);openDlg(lb)});
 });
 $("#evTabs").addEventListener("click",function(e){
